@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test
 
 open class PAPIPluginTest {
 
-    private lateinit var server: ServerMock
-    private lateinit var plugin: TestPlugin
+    lateinit var server: ServerMock
+    lateinit var plugin: TestPlugin
 
     @BeforeEach
     fun setUp() {

@@ -66,30 +66,30 @@ class CommandContext(
         return getExecutedString(withLabel=withLabel, 0, endIndex)
     }
 
-    fun getQuotedStringFromArgsRange(startIndex: Int, endIndex: Int) : QuotedStringSearchResult? {
-        val range = "Range[${startIndex}->${endIndex}]"
-        fun warnWithRange(str: String) : QuotedStringSearchResult? {
-            Bukkit.getLogger().warning("Cannot retrieve String from range of args of $range: $str")
-            return null
-        }
+    fun getLength(includeLabel: Boolean = false) : Int {
+        var len = if (includeLabel) 1 else 0
+        len += args.size
+        return len
+    }
 
+    fun getQuotedStringFromArgsRange(startIndex: Int, endIndex: Int) : QuotedStringSearchResult? {
         if (args.isEmpty())
-            return warnWithRange("Args are empty")
+            throw IllegalStateException("Args are empty")
         if (endIndex < 0)
-            return warnWithRange("endIndex is less than 0")
+            throw IllegalArgumentException("endIndex is less than 0")
         if (startIndex < 0)
-            return warnWithRange("startIndex is less than 0")
+            throw IllegalArgumentException("startIndex is less than 0")
         if (endIndex < startIndex)
-            return warnWithRange("endIndex is less than startIndex")
+            throw IllegalArgumentException("endIndex is less than startIndex")
 
         val len = args.size
 
         if (startIndex > len)
-            return warnWithRange("startIndex is out of bounds (> args size)")
+            throw IllegalArgumentException("startIndex is out of bounds of args size")
         if (endIndex > len)
-            return warnWithRange("endIndex is out of bounds (> args size)")
+            throw IllegalArgumentException("endIndex is out of bounds of args size")
         if (!isRangedArgsToStringInQuotes(startIndex, endIndex))
-            return warnWithRange("Not a quoted string! Check with CommandContext#isQuotedStringForRange or use CommandContext#getAnyQuotedString")
+            return null
 
         val executed = getExecutedString(withLabel=false, startIndex, endIndex)
 
@@ -128,7 +128,6 @@ class CommandContext(
 
         // args.size > 1
 
-        val fullString = getExecutedString(withLabel=false)
         var startIndex: Int? = null
         var endIndex: Int? = null
         var searchingFor: String? = null
@@ -158,13 +157,8 @@ class CommandContext(
             }
         }
 
-        if (startIndex == null) {
+        if (startIndex == null || endIndex == null)
             return null
-        } else if (endIndex == null) {
-            return null
-        }
-
-        val range = "Range[$startIndex, $endIndex]"
 
         return getQuotedStringFromArgsRange(startIndex, endIndex)
     }

@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.ChatColor as BungeeChatColor
 
-class TextBoxGenerator(
+class TextBoxBuilder(
     private val decorationColor: BungeeChatColor = BungeeChatColor.GRAY,
     private val withColor: Boolean = true,
     private val decorationPrefix: String = " ",
@@ -16,17 +16,17 @@ class TextBoxGenerator(
 
     private val contents: MutableList<TextComponent> = mutableListOf()
 
-    fun withLine(vararg text: TextComponent) : TextBoxGenerator {
+    fun withLine(vararg text: TextComponent) : TextBoxBuilder {
         this.contents.addAll(text)
         return this
     }
 
-    fun withLine(vararg text: String) : TextBoxGenerator {
+    fun withLine(vararg text: String) : TextBoxBuilder {
         text.forEach { this.contents.add(TextComponent(it)) }
         return this
     }
 
-    fun clearLines() : TextBoxGenerator {
+    fun clearLines() : TextBoxBuilder {
         this.contents.clear()
         return this
     }
