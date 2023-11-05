@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package extension
 
 import PAPIPluginTest
@@ -23,9 +25,9 @@ class StringExtensionsTest : PAPIPluginTest() {
     @Test
     fun doesDequotedNonQuotedStrEqOriginalStr() {
         val cases = arrayOf(
-            "Some text within quotes\"",
-            "\"Some text with a leading quote",
-            "'Some more text within quotes",
+            "Some text not within quotes\"",
+            "\"Some text without a trailing quote",
+            "'Some more text bit within quotes",
             "Some text with a trailing apostrophe'"
         )
         cases.forEach { assertEquals(it.dequoted(), it) }
