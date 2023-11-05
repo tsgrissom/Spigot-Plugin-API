@@ -140,13 +140,5 @@ class CommandFlagParser(
                 }
             }
         }
-
-        // Parse contextual arguments into a map of qualified flag names to a boolean of their presence
-        // TODO
-        Bukkit.getLogger().info("CommandFlagParser results:")
-        parsedFlags.map {
-            Bukkit.getLogger().info(" ${it.key}: ${it.value}")
-        }
-        Bukkit.getLogger().info("Unknown flags: ${getUnknownFlagsAsFormattedList()}")
     }
 }

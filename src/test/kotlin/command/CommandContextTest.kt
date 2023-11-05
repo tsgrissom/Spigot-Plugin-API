@@ -1,23 +1,10 @@
 package command
 
 import PAPIPluginTest
-import io.github.tsgrissom.pluginapi.command.CommandContext
-import org.bukkit.command.Command
-import org.bukkit.command.CommandSender
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class CommandContextTest : PAPIPluginTest() {
-
-    private fun mockCommandContext(
-        sender: CommandSender = server.consoleSender,
-        command: Command = server.commandMap.getCommand("test")!!,
-        label: String = "test",
-        args: Array<out String>
-    ) : CommandContext =
-        CommandContext(sender, command, label, args)
-    private fun mockCommandContext(vararg args: String) : CommandContext =
-        mockCommandContext(args=args)
 
     @Test
     fun doesExecutedStringSplitBySpaceEqExpectedLength() {
