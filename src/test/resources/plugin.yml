@@ -4,3 +4,4 @@ main: "TestPlugin"
 
 commands:
   test:
+    description: "A test command for mocking CommandContexts"

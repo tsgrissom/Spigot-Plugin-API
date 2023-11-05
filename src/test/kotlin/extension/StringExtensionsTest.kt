@@ -14,49 +14,58 @@ class StringExtensionsTest : PAPIPluginTest() {
     @DisplayName("Does String#dequoted when passed a quoted String not equal the original String?")
     @Test
     fun doesDequotedQuotedStrNeqOriginalQuotedStr() {
-        val cases = arrayOf(
+        arrayOf(
             "\"Some text within quotes\"",
             "'Some more text within quotes'"
-        )
-        cases.forEach { assertNotEquals(it.dequoted(), it) }
+        ).forEach {
+            assertNotEquals(it.dequoted(), it)
+        }
     }
 
     @DisplayName("Does String#dequoted when passed a non-quoted String equal the original String?")
     @Test
     fun doesDequotedNonQuotedStrEqOriginalStr() {
-        val cases = arrayOf(
+        arrayOf(
             "Some text not within quotes\"",
             "\"Some text without a trailing quote",
             "'Some more text bit within quotes",
             "Some text with a trailing apostrophe'"
-        )
-        cases.forEach { assertEquals(it.dequoted(), it) }
+        ).forEach {
+            assertEquals(it.dequoted(), it)
+        }
     }
 
     @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")
     @Test
     fun doesNonPercentStrNotMatchRegex() {
-        val cases = arrayOf("10", "%10", "10 %")
-        cases.forEach { assertFalse(it.isPercentage()) }
+        arrayOf(
+            "10", "%10", "10 %"
+        ).forEach {
+            assertFalse(it.isPercentage())
+        }
     }
 
     @DisplayName("Does a Percentage as a String Value Succeed in Matching the Percentage Regular Expression")
     @Test
     fun doesPercentStrMatchRegex() {
-        val cases = arrayOf("10%", "0.01%")
-        cases.forEach { assertTrue(it.isPercentage()) }
+        arrayOf(
+            "10%", "0.01%"
+        ).forEach {
+            assertTrue(it.isPercentage())
+        }
     }
 
     @DisplayName("Do various forms of chat color expressed in Strings all contain ChatColor?")
     @Suppress("DEPRECATION")
     @Test
     fun doesStrWithMixedColorTypesContainsChatColor() {
-        val cases = arrayOf(
+        arrayOf(
             "&aText with untranslated color codes",
             "&bSome text with translated color codes".translateColor(),
             "${ChatColor.RED}Text with interpolated ChatColor enumeration"
-        )
-        cases.forEach { assertTrue(it.containsChatColor()) }
+        ).forEach {
+            assertTrue(it.containsChatColor())
+        }
     }
 
     @DisplayName("Does String prepended with an untranslated color code then String#translateAndStripColorCodes equal the original String?")
@@ -72,30 +81,33 @@ class StringExtensionsTest : PAPIPluginTest() {
     @Suppress("DEPRECATION")
     @Test
     fun doesStrConsistingOfOnlyColorCodesMatchIsOnlyColorCodes() {
-        val cases = arrayOf(
+        arrayOf(
             "&b&l&m",
             ChatColor.RED.toString(),
             ChatColor.GREEN.toString() + ChatColor.BOLD.toString()
-        )
-        cases.forEach { assertTrue(it.isOnlyColorCodes()) }
+        ).forEach {
+            assertTrue(it.isOnlyColorCodes())
+        }
     }
 
     @DisplayName("Does String consisting of both ChatColors and text passed to String#isOnlyColorCodes equal false?")
     @Suppress("DEPRECATION")
     @Test
     fun doesSubstantialStrWithColorNotMatchIsOnlyCodes() {
-        val cases = arrayOf(
+        arrayOf(
             "&bThis is a colored string with substance",
             "${ChatColor.RED}This is another string"
-        )
-        cases.forEach { assertFalse(it.isOnlyColorCodes()) }
+        ).forEach {
+            assertFalse(it.isOnlyColorCodes())
+        }
     }
 
     @DisplayName("Does String#startsAndEndsWithSameChar(ignoreCase) when passed mixed-capitalization leading and trailing character palindromes always equal true?")
     @Test
     fun isStartsAndEndsIcTruthyOnPalindromeWithMixedCapitalization() {
-        val cases = arrayOf("civiC", "Madam", "leveL")
-        cases.forEach {
+        arrayOf(
+            "civiC", "Madam", "leveL"
+        ).forEach {
             assertTrue(it.startsAndEndsWithSameChar(ignoreCase=true))
         }
     }
@@ -103,8 +115,7 @@ class StringExtensionsTest : PAPIPluginTest() {
     @DisplayName("Does String#resolveChatColor when passed single-character color codes not equal null?")
     @Test
     fun doesResolveChatColorSucceedOnSingleCharColorCodes() {
-        val cases = "0123456789abcdef"
-        for (char in cases) {
+        "0123456789abcdef".forEach { char ->
             assertNotNull("$char".resolveChatColor())
         }
     }
@@ -112,8 +123,7 @@ class StringExtensionsTest : PAPIPluginTest() {
     @DisplayName("Does String#resolveChatColor when passed invalid single-character color codes equal null?")
     @Test
     fun doesResolveChatColorFailOnInvalidSingleCharColorCodes() {
-        val cases = "ghijp"
-        for (char in cases) {
+        "ghijp".forEach { char ->
             assertNull("$char".resolveChatColor())
         }
     }
@@ -121,8 +131,9 @@ class StringExtensionsTest : PAPIPluginTest() {
     @DisplayName("Does String#resolveChatColor when passed qualified input color codes not equal null?")
     @Test
     fun doesResolveChatColorSucceedOnQualifiedColorCodes() {
-        val cases = arrayOf("&a", "&l", "§b", "§k")
-        cases.forEach {
+        arrayOf(
+            "&a", "&l", "§b", "§k"
+        ).forEach {
             assertNotNull(it.resolveChatColor())
         }
     }
@@ -130,8 +141,9 @@ class StringExtensionsTest : PAPIPluginTest() {
     @DisplayName("Does String#resolveChatColor when passed invalid qualified input color codes equal null?")
     @Test
     fun doesResolveChatColorFailOnInvalidQualifiedColorCodes() {
-        val cases = arrayOf("&g", "&h", "§i", "§j")
-        cases.forEach {
+        arrayOf(
+            "&g", "&h", "§i", "§j"
+        ).forEach {
             assertNull(it.resolveChatColor())
         }
     }

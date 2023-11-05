@@ -118,6 +118,34 @@ fun String.isPercentage() : Boolean =
 
 /* MARK: String Mutations */
 
+// TODO Write test
+fun String.removePrefixes(vararg prefixes: String, once: Boolean = false, ignoreCase: Boolean = false) : String {
+    var s = this
+    for (pre in prefixes) {
+        if (s.startsWith(pre, ignoreCase=ignoreCase)) {
+            s = s.removePrefix(pre)
+            if (once)
+                return s
+        }
+    }
+    return s
+}
+
+// TODO Write test
+fun String.removeSuffixes(vararg suffixes: String, once: Boolean = false, ignoreCase: Boolean = false) : String {
+    var s = this
+    for (suff in suffixes) {
+        if (s.endsWith(suff, ignoreCase=ignoreCase)) {
+            s = s.removeSuffix(suff)
+            if (once)
+                return s
+        }
+    }
+    return s
+}
+
+// TODO Remove prefix and suffixes simultaneously
+
 /**
  * Capitalizes a String by only altering the first letter. Alternate method offered
  * by `String#capitalizeAllCaps()`.
