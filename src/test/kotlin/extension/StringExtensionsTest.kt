@@ -83,5 +83,40 @@ class StringExtensionsTest : PAPIPluginTest() {
     @Test
     fun isStartsAndEndsIcTruthyOnPalindromeWithMixedCapitalization() {
         val cases = arrayOf("civiC", "Madam", "leveL")
+        cases.forEach {
+            assertTrue(it.startsAndEndsWithSameChar(ignoreCase=true))
+        }
+    }
+
+    @Test
+    fun doesResolveChatColorSucceedOnSingleCharColorCodes() {
+        val cases = "0123456789abcdef"
+        for (char in cases) {
+            assertNotNull("$char".resolveChatColor())
+        }
+    }
+
+    @Test
+    fun doesResolveChatColorFailOnInvalidSingleCharColorCodes() {
+        val cases = "ghijp"
+        for (char in cases) {
+            assertNull("$char".resolveChatColor())
+        }
+    }
+
+    @Test
+    fun doesResolveChatColorSucceedOnQualifiedColorCodes() {
+        val cases = arrayOf("&a", "&l", "§b", "§k")
+        cases.forEach {
+            assertNotNull(it.resolveChatColor())
+        }
+    }
+
+    @Test
+    fun doesResolveChatColorFailOnInvalidQualifiedColorCodes() {
+        val cases = arrayOf("&g", "&h", "§i", "§j")
+        cases.forEach {
+            assertNull(it.resolveChatColor())
+        }
     }
 }

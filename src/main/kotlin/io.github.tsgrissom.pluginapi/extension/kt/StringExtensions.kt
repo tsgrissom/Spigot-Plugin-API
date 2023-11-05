@@ -49,8 +49,17 @@ fun String.equalsAny(vararg others: String) : Boolean =
 fun String.startsAndEndsWith(
     str: String,
     ignoreCase: Boolean = false
-) : Boolean =
-    this.startsWith(str, ignoreCase=ignoreCase) && this.endsWith(str, ignoreCase=ignoreCase)
+) : Boolean {
+    if (this.isEmpty())
+        return false
+    return this.startsWith(str, ignoreCase = ignoreCase) && this.endsWith(str, ignoreCase = ignoreCase)
+}
+
+fun String.startsAndEndsWithSameChar(ignoreCase: Boolean = false) : Boolean {
+    if (this.isEmpty())
+        return false
+    return this.endsWith(this[0], ignoreCase=ignoreCase)
+}
 
 /**
  * Checks if the String is surrounded by single quotes. Determined by checking if
@@ -252,20 +261,17 @@ fun String.isOnlyColorCodes() : Boolean {
  * @return A ChatColor or null.
  */
 fun String.resolveChatColor() : ChatColor? {
-    val bLog = Bukkit.getLogger()
-    fun warnAndNull(str: String) : ChatColor? {
-        bLog.warning(str)
+    if (this.isEmpty())
         return null
-    }
 
-    if (this.length == 2 && this.startsWith("&")) { // TODO Check if color code is contained in the String of valid chars
-        val colorCode = this.removePrefix("&")
+    if (this.length == 1) {
+        return ChatColor.getByChar(this)
+    } else if (this.length == 2 && (this.startsWith("&") || this.startsWith("§"))) {
+        var colorCode = this.removePrefix("&")
+        if (colorCode.startsWith("§"))
+            colorCode = colorCode.removePrefix("§")
 
         return ChatColor.getByChar(colorCode)
-            ?: return warnAndNull("Thought \"$this\" was a ampersand + color code but getByChar resolved to null")
-    } else if (this.length == 1) {
-        return ChatColor.getByChar(this)
-            ?: return warnAndNull("Thought \"$this\" was a single-character color code but getByChar resolved to null")
     } else {
         // TODO Something to support hex codes
 
@@ -276,6 +282,6 @@ fun String.resolveChatColor() : ChatColor? {
                 return c
         }
 
-        return warnAndNull("Could not determine what ChatColor \"$this\" is supposed to be")
+        return null
     }
 }
