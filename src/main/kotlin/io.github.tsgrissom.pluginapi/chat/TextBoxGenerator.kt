@@ -6,25 +6,23 @@ import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.ChatColor as BungeeChatColor
 
 class TextBoxGenerator(
-    private val decorationColor: BungeeChatColor,
-    private val withColor: Boolean = true
+    private val decorationColor: BungeeChatColor = BungeeChatColor.GRAY,
+    private val withColor: Boolean = true,
+    private val decorationPrefix: String = " ",
+    private val decorationChar: Char = '-',
+    private val repeatDecorationChar: Int = 40,
+    private val linePrefix: String = " | "
 ) {
 
     private val contents: MutableList<TextComponent> = mutableListOf()
 
-    fun withLine(text: TextComponent) : TextBoxGenerator {
-        // If all smashed into one line, do something like if not empty, prepend newline char
-        this.contents.add(text)
-        return this
-    }
-
-    fun withLines(vararg text: TextComponent) : TextBoxGenerator {
+    fun withLine(vararg text: TextComponent) : TextBoxGenerator {
         this.contents.addAll(text)
         return this
     }
 
-    fun withLine(str: String) : TextBoxGenerator {
-        this.contents.add(TextComponent(str))
+    fun withLine(vararg text: String) : TextBoxGenerator {
+        text.forEach { this.contents.add(TextComponent(it)) }
         return this
     }
 
@@ -34,27 +32,20 @@ class TextBoxGenerator(
     }
 
     fun toComponents() : Array<BaseComponent> {
-        // 40 chars wide
-        val horizontalLine = " ----------------------------------------" // TODO Chars + length options
-        val pre = " | "
+        val repeated = "$decorationChar".repeat(repeatDecorationChar)
+        val horizontalLine = "$decorationPrefix$repeated"
         val builder = ComponentBuilder()
 
         builder.append("${horizontalLine}\n")
         if (withColor)
             builder.color(decorationColor)
 
-        for ((i, line) in contents.withIndex()) {
-            fun newLine() {
-                if (i != (contents.size - 1))
-                    builder.append("\n")
-            }
-
-            builder.append(pre)
+        for (line in contents) {
+            builder.append(linePrefix)
             if (withColor)
                 builder.color(decorationColor)
 
-            builder.append(line)
-            newLine()
+            builder.append(line).append("\n")
         }
 
         builder.append(horizontalLine)
