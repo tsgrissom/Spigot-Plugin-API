@@ -1,0 +1,3 @@
+name: "PAPIPlugin"
+version: "1.0.0"
+main: "TestPlugin"
