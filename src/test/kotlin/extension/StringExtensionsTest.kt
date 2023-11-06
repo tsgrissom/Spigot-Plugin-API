@@ -145,24 +145,24 @@ class StringExtensionsTest : PAPIPluginTest() {
     // MARK: Percentage Tests
 
     @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")
-    @Test
-    fun doesNonPercentStrNotMatchRegex() {
-        arrayOf(
-            "10", "%10", "10 %"
-        ).forEach {
-            assertFalse(it.isPercentage())
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "10",
+        "%10",
+        "10 %",
+        "-1%"
+    ])
+    fun isPercent_shouldBeFalseWhenValuesAreNotPercentagesAsStrings(value: String) =
+        assertFalse(value.isPercentage())
 
     @DisplayName("Does a Percentage as a String Value Succeed in Matching the Percentage Regular Expression")
-    @Test
-    fun doesPercentStrMatchRegex() {
-        arrayOf(
-            "10%", "0.01%"
-        ).forEach {
-            assertTrue(it.isPercentage())
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "10%",
+        "0.01%"
+    ])
+    fun isPercent_shouldBeTrueWhenValuesArePercentagesAsStrings(value: String) =
+        assertTrue(value.isPercentage())
 
     // MARK: Prefixes/Suffix Tests
 
