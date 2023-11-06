@@ -166,27 +166,25 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     // MARK: Prefixes/Suffix Tests
 
-    @Test
-    fun doesStringToRemovePrefixesNeqOriginalString() {
-        arrayOf(
-            "'Leading apostrophe str",
-            "'Foobar",
-            "'foobarbaz"
-        ).forEach { str ->
-            assertNotEquals(str.removePrefixes("'"), str)
-        }
-    }
+    @DisplayName("Does String#removePrefixes not equal original String when receivers all contain the prefixes?")
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "'Leading apostrophe str",
+        "'Foobar",
+        "'foobarbaz"
+    ])
+    fun removePrefixes_shouldNeqOriginalString(value: String) =
+        assertNotEquals(value.removePrefixes("'"), value)
 
-    @Test
-    fun doesStringToRemoveSuffixesNeqOriginalString() {
-        arrayOf(
-            "Trailing apostrophe'",
-            "Another String, this time a trailing quote\"",
-            "This String with lose the trailing period."
-        ).forEach { str ->
-            assertNotEquals(str.removeSuffixes("'", "\"", "."), str)
-        }
-    }
+    @DisplayName("Does String#removeSuffixes not equal original String when receivers all contain the suffixes?")
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "Trailing apostrophe'",
+        "Another String, this time a trailing quote\"",
+        "This String with lose the trailing period."
+    ])
+    fun removeSuffixes_shouldNeqOriginalString(value: String) =
+        assertNotEquals(value.removeSuffixes("'", "\"", "."), value)
 
     // MARK: Quotation Tests
 
