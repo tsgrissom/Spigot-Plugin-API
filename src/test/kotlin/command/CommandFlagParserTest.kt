@@ -5,11 +5,10 @@ import assertEmpty
 import assertNotEmpty
 import io.github.tsgrissom.pluginapi.command.flag.CommandFlagParser
 import io.github.tsgrissom.pluginapi.command.flag.ValidCommandFlag
+import io.github.tsgrissom.pluginapi.command.flag.ValidCommandFlag.Companion.FLAG_GRAPHICAL
 import org.junit.jupiter.api.Test
 
 class CommandFlagParserTest : PAPIPluginTest() {
-
-    private val flagGui = ValidCommandFlag("gui")
 
     @Test
     fun doesContextWithGuiFlagPassedHaveEmptyUnknownFlags() {
@@ -17,7 +16,7 @@ class CommandFlagParserTest : PAPIPluginTest() {
             mockCommandContext("--gui"),
             mockCommandContext("-g")
         ).forEach { context ->
-            assertEmpty(CommandFlagParser(context.args, flagGui).getUnknownFlags())
+            assertEmpty(CommandFlagParser(context.args, FLAG_GRAPHICAL).getUnknownFlags())
         }
     }
 
@@ -27,7 +26,7 @@ class CommandFlagParserTest : PAPIPluginTest() {
             mockCommandContext("-G", "--gui"),
             mockCommandContext("--foo")
         ).forEach { context ->
-            assertNotEmpty(CommandFlagParser(context.args, flagGui).getUnknownFlags())
+            assertNotEmpty(CommandFlagParser(context.args, FLAG_GRAPHICAL).getUnknownFlags())
         }
     }
 }

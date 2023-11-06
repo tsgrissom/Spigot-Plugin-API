@@ -140,7 +140,7 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     @DisplayName("Does String#resolveChatColor when passed invalid qualified input color codes equal null?")
     @Test
-    fun doesResolveChatColorFailOnInvalidQualifiedColorCodes() {
+    fun doesResolveChatColorEqNullOnInvalidQualifiedColorCodes() {
         arrayOf(
             "&g", "&h", "§i", "§j"
         ).forEach {
