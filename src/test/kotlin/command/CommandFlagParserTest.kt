@@ -4,7 +4,6 @@ import PAPIPluginTest
 import assertEmpty
 import assertNotEmpty
 import io.github.tsgrissom.pluginapi.command.flag.CommandFlagParser
-import io.github.tsgrissom.pluginapi.command.flag.ValidCommandFlag
 import io.github.tsgrissom.pluginapi.command.flag.ValidCommandFlag.Companion.FLAG_GRAPHICAL
 import org.junit.jupiter.api.Test
 

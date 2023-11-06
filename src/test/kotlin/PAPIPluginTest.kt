@@ -4,9 +4,7 @@ import io.github.tsgrissom.pluginapi.command.CommandContext
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
 
 open class PAPIPluginTest {
 
