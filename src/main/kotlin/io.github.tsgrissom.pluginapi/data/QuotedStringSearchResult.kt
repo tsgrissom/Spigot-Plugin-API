@@ -1,6 +1,7 @@
 package io.github.tsgrissom.pluginapi.data
 
 import io.github.tsgrissom.pluginapi.extension.kt.dequoted
+import io.github.tsgrissom.pluginapi.extension.kt.isNotQuoted
 import io.github.tsgrissom.pluginapi.extension.kt.isQuoted
 
 /**
@@ -13,8 +14,8 @@ data class QuotedStringSearchResult(
 ) {
 
     init {
-        if (!quotedString.isQuoted())
-            error("Cannot initialize QuotedStringSearchResults for non-quoted String(=${quotedString})")
+        if (quotedString.isNotQuoted())
+            throw IllegalArgumentException("Cannot initialize QuotedStringSearchResults for non-quoted String(=${quotedString})")
     }
 
     /**

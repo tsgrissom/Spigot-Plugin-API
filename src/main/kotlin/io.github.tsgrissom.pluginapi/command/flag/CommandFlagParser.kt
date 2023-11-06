@@ -19,9 +19,8 @@ private fun String.isInLongFlagFormat() : Boolean {
 
 class CommandFlagParser(
     contextualArgs: Array<out String>,
-    vararg validFlags: ValidCommandFlag,
+    vararg validFlags: ValidCommandFlag
 ) {
-
     private val parsedFlags = mutableMapOf<String, Boolean>()
     private val unknownFlags = mutableSetOf<String>()
 
@@ -67,13 +66,10 @@ class CommandFlagParser(
                             isValid = true
                     }
 
-                    if (shortFlagInput.contains(char)) {
-                        Bukkit.getLogger().warning("Duplicate short flag parsed \"$char\"")
+                    if (shortFlagInput.contains(char))
                         continue
-                    }
 
                     if (!isValid) {
-                        Bukkit.getLogger().warning("Unknown short flag parsed \"$char\"")
                         unknownFlags.add(char.toString())
                         continue
                     }
@@ -90,23 +86,16 @@ class CommandFlagParser(
                 }
 
                 if (!isValid) {
-                    Bukkit.getLogger().warning("Unknown long flag parsed \"$sans\"")
                     unknownFlags.add(sans)
                     continue
                 }
 
-                if (longFlagInput.contains(sans)) {
-                    Bukkit.getLogger().warning("Duplicate long flag parsed \"$sans\"")
+                if (longFlagInput.contains(sans))
                     continue
-                }
 
                 longFlagInput.add(sans)
             }
         }
-
-        // If a short flag input has been built, log it if debugging
-        if (shortFlagInput.isNotEmpty())
-            Bukkit.getLogger().info("Short flag input assembled: $shortFlagInput")
 
         /*
          * For each valid flag we are looking for:
@@ -124,7 +113,7 @@ class CommandFlagParser(
                 continue
 
             if (shortFlagInput.isNotEmpty() && shortFlagInput.contains(flag.getShortNameAsChar(), false)) {
-                Bukkit.getLogger().info("Short flag for \"$qn\" detected")
+                // Short flag detected
                 parsedFlags[qn] = true
                 continue
             }
@@ -135,7 +124,7 @@ class CommandFlagParser(
 
                 val sans = arg.removePrefix("--")
                 if (qn.equalsIc(sans)) {
-                    Bukkit.getLogger().info("Long flag \"$qn\" detected")
+                    // Long flag detected
                     parsedFlags[qn] = true
                 }
             }

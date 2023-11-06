@@ -31,6 +31,7 @@ fun String.equalsIc(vararg others: String) : Boolean =
 fun String.equalsIc(others: List<String>) : Boolean =
     others.firstOrNull { this.equalsIc(it) } != null
 
+// TODO Write tests
 /**
  * Checks for exact equality between one String and any number of other Strings with case-sensitivity.
  * @param others Any number of Strings to compare against.
@@ -85,6 +86,9 @@ fun String.isDoubleQuoted() : Boolean =
  */
 fun String.isQuoted() : Boolean =
     (this.isSingleQuoted() || this.isDoubleQuoted())
+
+fun String.isNotQuoted() : Boolean =
+    !this.isQuoted()
 
 /**
  * Removes surrounding pairs of matching quote characters from the String. If the String is not quoted, returns the
@@ -145,6 +149,8 @@ fun String.removeSuffixes(vararg suffixes: String, once: Boolean = false, ignore
 }
 
 // TODO Remove prefix and suffixes simultaneously
+// TODO Surround with methods
+// TODO isCapitalized method
 
 /**
  * Capitalizes a String by only altering the first letter. Alternate method offered
@@ -172,6 +178,7 @@ fun String.capitalize() : String {
 fun String.capitalizeAllCaps() : String =
     this.lowercase().capitalize()
 
+// TODO Write tests
 /**
  * Capitalizes each word of the String where it is expected to be in all capital letters with each word delimited by a
  * specific String called the delimiter.
