@@ -17,7 +17,7 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     @DisplayName("Do various forms of chat color expressed in Strings all contain ChatColor?")
     @Test
-    fun doesStrWithMixedColorTypesContainsChatColor() {
+    fun containsChatColor_shouldBeTrueWhenValuesAreVariedFormsOfColoredText() {
         arrayOf(
             "&aText with untranslated color codes",
             "&bSome text with translated color codes".translateColor(),
@@ -29,7 +29,7 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     @DisplayName("Does String prepended with an untranslated color code then String#translateAndStripColorCodes equal the original String?")
     @Test
-    fun doesStrPrependedWithUntranslatedColorCodesThenTranslatedAndStrippedEqOriginalStr() {
+    fun translateAndStripColorCodes_shouldEqualOriginalStrWhenValueIsStringPrependedWithUntranslatedColor() {
         val original = "Some text that will have a chat color prepended"
         val pre = "&a&l"
         val combinedThenTranslatedAndStripped = "$pre$original".translateAndStripColorCodes()
@@ -38,7 +38,7 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     @DisplayName("Does String consisting of only color codes and ChatColors passed to String#isOnlyColorCodes equal true?")
     @Test
-    fun doesStrConsistingOfOnlyColorCodesMatchIsOnlyColorCodes() {
+    fun isOnlyColorCodes_shouldBeTrueWhenValuesAreOnlyColorCodesAndChatColors() {
         arrayOf(
             "&b&l&m",
             ChatColor.RED.toString(),
@@ -50,18 +50,19 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     @DisplayName("Does String consisting of both ChatColors and text passed to String#isOnlyColorCodes equal false?")
     @Test
-    fun doesSubstantialStrWithColorNotMatchIsOnlyCodes() {
+    fun isOnlyColorCodes_shouldBeFalseWhenValuesAreMultiFormatChatColorsAndText() {
         arrayOf(
             "&bThis is a colored string with substance",
-            "${ChatColor.RED}This is another string"
-        ).forEach {
-            assertFalse(it.isOnlyColorCodes())
+            "${ChatColor.RED}This is another string",
+            "§lThis is some bold text"
+        ).forEach { str ->
+            assertFalse(str.isOnlyColorCodes())
         }
     }
 
     @DisplayName("Does String#resolveChatColor when passed single-character color codes not equal null?")
     @Test
-    fun doesResolveChatColorSucceedOnSingleCharColorCodes() {
+    fun resolveChatColor_shouldBeNonNullWhenValuesAreValidSingleCharColorCodes() {
         "0123456789abcdef".forEach { char ->
             assertNotNull("$char".resolveChatColor())
         }
@@ -69,78 +70,67 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     @DisplayName("Does String#resolveChatColor when passed invalid single-character color codes equal null?")
     @Test
-    fun doesResolveChatColorFailOnInvalidSingleCharColorCodes() {
+    fun resolveChatColor_shouldBeNullWhenValuesAreInvalidSingleCharColorCodes() {
         "ghijp".forEach { char ->
             assertNull("$char".resolveChatColor())
         }
     }
 
     @DisplayName("Does String#resolveChatColor when passed qualified input color codes not equal null?")
-    @Test
-    fun doesResolveChatColorSucceedOnQualifiedColorCodes() {
-        arrayOf(
-            "&a", "&l", "§b", "§k"
-        ).forEach {
-            assertNotNull(it.resolveChatColor())
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=["&a", "&l", "§b", "§k"])
+    fun resolveChatColor_shouldBeNonNullWhenValuesAreValidQualifiedColorCodes(value: String) =
+        assertNotNull(value.resolveChatColor())
 
     @DisplayName("Does String#resolveChatColor when passed invalid qualified input color codes equal null?")
-    @Test
-    fun doesResolveChatColorEqNullOnInvalidQualifiedColorCodes() {
-        arrayOf(
-            "&g", "&h", "§i", "§j"
-        ).forEach {
-            assertNull(it.resolveChatColor())
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=["&g", "&h", "§i", "§j"])
+    fun resolveChatColor_shouldBeNullWhenValuesAreInvalidQualifiedColorCodes(value: String) =
+        assertNull(value.resolveChatColor())
 
     @DisplayName("Does String#startsAndEndsWithSameChar(ignoreCase) when passed mixed-capitalization leading and trailing character palindromes always equal true?")
-    @Test
-    fun isStartsAndEndsIcTruthyOnPalindromeWithMixedCapitalization() {
-        arrayOf(
-            "civiC", "Madam", "leveL"
-        ).forEach {
-            assertTrue(it.startsAndEndsWithSameChar(ignoreCase=true))
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "civiC",
+        "Madam",
+        "leveL"
+    ])
+    fun startsAndEndsWithSameCharIgnoreCase_shouldBeTrueWhenValuesAreMixedUppercasedLeadingTrailingCharPalindromes(value: String) =
+        assertTrue(value.startsAndEndsWithSameChar(ignoreCase=true))
 
     @DisplayName("Does String#equalsAny equal false when all arguments are similar Strings with different uppercasing?")
-    @Test
-    fun doesEqualsAnyEqualFalseWhenParametersAreSameStringWithDifferentUppercasing() {
-        val original = "Hello world!"
-        val comparedTo = arrayOf("hEllo world!", "Hello World!", "HELLO WORLD!")
-
-        assertFalse(original.equalsAny(*comparedTo))
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "hEllo world!",
+        "Hello World!",
+        "HELLO WORLD!"
+    ])
+    fun equalsAny_shouldBeFalseWhenValuesAreSimilarButHaveVariedUppercasing(comparedTo: String) =
+        assertFalse("Hello world!".equalsAny(comparedTo))
 
     // MARK: Capitalization Tests
 
     @DisplayName("Does String#isCapitalized when all arguments are Strings with leading character as punctuation equal false?")
-    @Test
-    fun doesStringWithLeadingPunctuationCharacterToIsCapitalizedEqualFalse() {
-        arrayOf(
-            "-sometext",
-            ".testing",
-            ",foo",
-            " bar"
-        ).forEach { str ->
-            assertFalse(str.isCapitalized())
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "-sometext",
+        ".testing",
+        ",foo",
+        " bar"
+    ])
+    fun isCapitalized_shouldBeFalseWhenValuesHaveLeadingCharacterAsPunctuation(value: String) =
+        assertFalse(value.isCapitalized())
 
     @DisplayName("Does String#capitalize when all arguments are Strings with leading character as punctuation equal the original String?")
-    @Test
-    fun doesStringWithLeadingPunctuationCharacterToCapitalizeFuncEqualOriginalString() {
-        arrayOf(
-            "-sometext",
-            ".testing",
-            ",foo",
-            " bar"
-        ).forEach { str ->
-            assertEquals(str.capitalize(), str)
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "-sometext",
+        ".testing",
+        ",foo",
+        " bar"
+    ])
+    fun capitalize_shouldEqualOriginalStrWhenValuesHaveLeadingCharacterAsPunctuation(value: String) =
+        assertEquals(value.capitalize(), value)
 
     // MARK: Percentage Tests
 
@@ -206,7 +196,7 @@ class StringExtensionsTest : PAPIPluginTest() {
         "Some text with a trailing apostrophe'"
     ])
     fun dequoted_shouldEqOriginalStrWhenNonQuoted(value: String) =
-        assertNotEquals(value.dequoted(), value)
+        assertEquals(value.dequoted(), value)
 
     @DisplayName("Does String#quoted not equal the original String?")
     @ParameterizedTest
