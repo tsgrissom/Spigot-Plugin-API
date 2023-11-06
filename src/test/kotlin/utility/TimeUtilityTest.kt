@@ -10,7 +10,7 @@ class TimeUtilityTest : PAPIPluginTest() {
 
     @DisplayName("Does an assortment of valid Strings expressing time in seconds passed to TimeUtility#isInputInSeconds evaluate to true?")
     @Test
-    fun inputStringIsInputInSeconds() {
+    fun isInputStringInSeconds() {
         val util = TimeUtility()
         fun assert(str: String) =
             assertTrue(util.isInputInSeconds(str), "$str is not valid input as seconds")
@@ -20,7 +20,7 @@ class TimeUtilityTest : PAPIPluginTest() {
 
     @DisplayName("Does an assortment of valid Strings expressing time in minutes passed to TimeUtility#isInputInMinutes evaluate to true?")
     @Test
-    fun inputStringIsInputInMinutes() {
+    fun isInputStringInMinutes() {
         val util = TimeUtility()
         fun assert(str: String) =
             assertTrue(util.isInputInMinutes(str), "$str is not valid input as minutes")
@@ -30,7 +30,7 @@ class TimeUtilityTest : PAPIPluginTest() {
 
     @DisplayName("Does an assortment of valid Strings expressing time in hours passed to TimeUtility#isInputInHours evaluate to true?")
     @Test
-    fun inputStringIsInputInHours() {
+    fun isInputStringInHours() {
         val util = TimeUtility()
         fun assert(str: String) =
             assertTrue(util.isInputInHours(str), "$str is not valid input as minutes")

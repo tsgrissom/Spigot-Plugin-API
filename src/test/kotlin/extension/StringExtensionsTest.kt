@@ -8,6 +8,8 @@ import org.bukkit.ChatColor
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class StringExtensionsTest : PAPIPluginTest() {
 
@@ -189,40 +191,28 @@ class StringExtensionsTest : PAPIPluginTest() {
     // MARK: Quotation Tests
 
     @DisplayName("Does String#dequoted when passed a quoted String not equal the original String?")
-    @Test
-    fun doesDequotedQuotedStrNeqOriginalQuotedStr() {
-        arrayOf(
-            "\"Some text within quotes\"",
-            "'Some more text within quotes'"
-        ).forEach {
-            assertNotEquals(it.dequoted(), it)
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "\"Some text within quotes\"",
+        "'Some more text within quotes'"
+    ])
+    fun dequoted_shouldNeqOriginalStrWhenQuoted(value: String) =
+        assertNotEquals(value.dequoted(), value)
 
     @DisplayName("Does String#dequoted when passed a non-quoted String equal the original String?")
-    @Test
-    fun doesDequotedNonQuotedStrEqOriginalStr() {
-        arrayOf(
-            "Some text not within quotes\"",
-            "\"Some text without a trailing quote",
-            "'Some more text bit within quotes",
-            "Some text with a trailing apostrophe'"
-        ).forEach {
-            assertEquals(it.dequoted(), it)
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "Some text not within quotes\"",
+        "\"Some text without a trailing quote",
+        "'Some more text bit within quotes",
+        "Some text with a trailing apostrophe'"
+    ])
+    fun dequoted_shouldEqOriginalStrWhenNonQuoted(value: String) =
+        assertNotEquals(value.dequoted(), value)
 
     @DisplayName("Does String#quoted not equal the original String?")
-    @Test
-    fun doesStringToQuotedFuncNeqOriginalString() {
-        arrayOf(
-            "foobar",
-            "foo",
-            "bar",
-            "baz",
-            "qux"
-        ).forEach { str ->
-            assertNotEquals(str.quoted(), str)
-        }
-    }
+    @ParameterizedTest
+    @ValueSource(strings=["foobar", "foo", "bar", "baz", "qux"])
+    fun quoted_shouldNeqOriginalString(value: String) =
+        assertNotEquals(value.quoted(), value)
 }
