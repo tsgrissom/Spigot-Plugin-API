@@ -31,7 +31,6 @@ fun String.equalsIc(vararg others: String) : Boolean =
 fun String.equalsIc(others: List<String>) : Boolean =
     others.firstOrNull { this.equalsIc(it) } != null
 
-// TODO Write tests
 /**
  * Checks for exact equality between one String and any number of other Strings with case-sensitivity.
  * @param others Any number of Strings to compare against.
@@ -53,7 +52,7 @@ fun String.startsAndEndsWith(
 ) : Boolean {
     if (this.isEmpty())
         return false
-    return this.startsWith(str, ignoreCase = ignoreCase) && this.endsWith(str, ignoreCase = ignoreCase)
+    return this.startsWith(str, ignoreCase=ignoreCase) && this.endsWith(str, ignoreCase=ignoreCase)
 }
 
 fun String.startsAndEndsWithSameChar(ignoreCase: Boolean = false) : Boolean {
@@ -147,6 +146,18 @@ fun String.removeSuffixes(vararg suffixes: String, once: Boolean = false, ignore
     }
     return s
 }
+
+fun String.surroundWith(str: String) : String =
+    "$str$this$str"
+
+fun String.quoted() : String =
+    this.surroundWith("\"")
+
+fun String.singleQuoted() : String =
+    this.surroundWith("'")
+
+fun String.isCapitalized() : Boolean =
+    this[0].isUpperCase()
 
 // TODO Remove prefix and suffixes simultaneously
 // TODO Surround with methods

@@ -147,4 +147,13 @@ class StringExtensionsTest : PAPIPluginTest() {
             assertNull(it.resolveChatColor())
         }
     }
+
+    @DisplayName("Does String#equalsAny equal false when all arguments are similar Strings with different uppercasing?")
+    @Test
+    fun doesEqualsAnyEqualFalseWhenParametersAreSameStringWithDifferentUppercasing() {
+        val original = "Hello world!"
+        val comparedTo = arrayOf("hEllo world!", "Hello World!", "HELLO WORLD!")
+
+        assertFalse(original.equalsAny(*comparedTo))
+    }
 }

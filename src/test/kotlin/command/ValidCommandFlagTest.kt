@@ -11,7 +11,9 @@ class ValidCommandFlagTest : PAPIPluginTest() {
 
     @Test
     fun doesSingleCharCommandFlagThrowException() {
-        assertThrows<IllegalArgumentException>("Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not") {
+        assertThrows<IllegalArgumentException>(
+            "Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not"
+        ) {
             ValidCommandFlag("g")
         }
     }
@@ -19,7 +21,8 @@ class ValidCommandFlagTest : PAPIPluginTest() {
     @Test
     fun doesCommandFlagWithLeadingHyphenCharThrowException() {
         assertThrows<IllegalArgumentException>(
-            "Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not") {
+            "Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not"
+        ) {
             ValidCommandFlag("-invalidflag")
         }
     }
