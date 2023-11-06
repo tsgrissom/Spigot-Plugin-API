@@ -61,6 +61,9 @@ fun String.startsAndEndsWithSameChar(ignoreCase: Boolean = false) : Boolean {
     return this.endsWith(this[0], ignoreCase=ignoreCase)
 }
 
+fun String.surroundWith(str: String) : String =
+    "$str$this$str"
+
 /**
  * Checks if the String is surrounded by single quotes. Determined by checking if
  * the String starts with a single quote and ends with a single quote.
@@ -88,6 +91,15 @@ fun String.isQuoted() : Boolean =
 
 fun String.isNotQuoted() : Boolean =
     !this.isQuoted()
+
+fun String.quoted(single: Boolean = false) : String =
+    if (single) this.singleQuoted() else this.doubleQuoted()
+
+fun String.doubleQuoted() : String =
+    this.surroundWith("\"")
+
+fun String.singleQuoted() : String =
+    this.surroundWith("'")
 
 /**
  * Removes surrounding pairs of matching quote characters from the String. If the String is not quoted, returns the
@@ -135,7 +147,11 @@ fun String.removePrefixes(vararg prefixes: String, once: Boolean = false, ignore
 }
 
 // TODO Write test
-fun String.removeSuffixes(vararg suffixes: String, once: Boolean = false, ignoreCase: Boolean = false) : String {
+fun String.removeSuffixes(
+    vararg suffixes: String,
+    once: Boolean = false,
+    ignoreCase: Boolean = false
+) : String {
     var s = this
     for (suff in suffixes) {
         if (s.endsWith(suff, ignoreCase=ignoreCase)) {
@@ -147,21 +163,8 @@ fun String.removeSuffixes(vararg suffixes: String, once: Boolean = false, ignore
     return s
 }
 
-fun String.surroundWith(str: String) : String =
-    "$str$this$str"
-
-fun String.quoted() : String =
-    this.surroundWith("\"")
-
-fun String.singleQuoted() : String =
-    this.surroundWith("'")
-
 fun String.isCapitalized() : Boolean =
     this[0].isUpperCase()
-
-// TODO Remove prefix and suffixes simultaneously
-// TODO Surround with methods
-// TODO isCapitalized method
 
 /**
  * Capitalizes a String by only altering the first letter. Alternate method offered

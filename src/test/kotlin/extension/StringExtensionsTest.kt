@@ -11,52 +11,9 @@ import org.junit.jupiter.api.Test
 
 class StringExtensionsTest : PAPIPluginTest() {
 
-    @DisplayName("Does String#dequoted when passed a quoted String not equal the original String?")
-    @Test
-    fun doesDequotedQuotedStrNeqOriginalQuotedStr() {
-        arrayOf(
-            "\"Some text within quotes\"",
-            "'Some more text within quotes'"
-        ).forEach {
-            assertNotEquals(it.dequoted(), it)
-        }
-    }
-
-    @DisplayName("Does String#dequoted when passed a non-quoted String equal the original String?")
-    @Test
-    fun doesDequotedNonQuotedStrEqOriginalStr() {
-        arrayOf(
-            "Some text not within quotes\"",
-            "\"Some text without a trailing quote",
-            "'Some more text bit within quotes",
-            "Some text with a trailing apostrophe'"
-        ).forEach {
-            assertEquals(it.dequoted(), it)
-        }
-    }
-
-    @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")
-    @Test
-    fun doesNonPercentStrNotMatchRegex() {
-        arrayOf(
-            "10", "%10", "10 %"
-        ).forEach {
-            assertFalse(it.isPercentage())
-        }
-    }
-
-    @DisplayName("Does a Percentage as a String Value Succeed in Matching the Percentage Regular Expression")
-    @Test
-    fun doesPercentStrMatchRegex() {
-        arrayOf(
-            "10%", "0.01%"
-        ).forEach {
-            assertTrue(it.isPercentage())
-        }
-    }
+    // MARK: ChatColor Tests
 
     @DisplayName("Do various forms of chat color expressed in Strings all contain ChatColor?")
-    @Suppress("DEPRECATION")
     @Test
     fun doesStrWithMixedColorTypesContainsChatColor() {
         arrayOf(
@@ -78,7 +35,6 @@ class StringExtensionsTest : PAPIPluginTest() {
     }
 
     @DisplayName("Does String consisting of only color codes and ChatColors passed to String#isOnlyColorCodes equal true?")
-    @Suppress("DEPRECATION")
     @Test
     fun doesStrConsistingOfOnlyColorCodesMatchIsOnlyColorCodes() {
         arrayOf(
@@ -91,7 +47,6 @@ class StringExtensionsTest : PAPIPluginTest() {
     }
 
     @DisplayName("Does String consisting of both ChatColors and text passed to String#isOnlyColorCodes equal false?")
-    @Suppress("DEPRECATION")
     @Test
     fun doesSubstantialStrWithColorNotMatchIsOnlyCodes() {
         arrayOf(
@@ -99,16 +54,6 @@ class StringExtensionsTest : PAPIPluginTest() {
             "${ChatColor.RED}This is another string"
         ).forEach {
             assertFalse(it.isOnlyColorCodes())
-        }
-    }
-
-    @DisplayName("Does String#startsAndEndsWithSameChar(ignoreCase) when passed mixed-capitalization leading and trailing character palindromes always equal true?")
-    @Test
-    fun isStartsAndEndsIcTruthyOnPalindromeWithMixedCapitalization() {
-        arrayOf(
-            "civiC", "Madam", "leveL"
-        ).forEach {
-            assertTrue(it.startsAndEndsWithSameChar(ignoreCase=true))
         }
     }
 
@@ -148,6 +93,16 @@ class StringExtensionsTest : PAPIPluginTest() {
         }
     }
 
+    @DisplayName("Does String#startsAndEndsWithSameChar(ignoreCase) when passed mixed-capitalization leading and trailing character palindromes always equal true?")
+    @Test
+    fun isStartsAndEndsIcTruthyOnPalindromeWithMixedCapitalization() {
+        arrayOf(
+            "civiC", "Madam", "leveL"
+        ).forEach {
+            assertTrue(it.startsAndEndsWithSameChar(ignoreCase=true))
+        }
+    }
+
     @DisplayName("Does String#equalsAny equal false when all arguments are similar Strings with different uppercasing?")
     @Test
     fun doesEqualsAnyEqualFalseWhenParametersAreSameStringWithDifferentUppercasing() {
@@ -155,5 +110,119 @@ class StringExtensionsTest : PAPIPluginTest() {
         val comparedTo = arrayOf("hEllo world!", "Hello World!", "HELLO WORLD!")
 
         assertFalse(original.equalsAny(*comparedTo))
+    }
+
+    // MARK: Capitalization Tests
+
+    @DisplayName("Does String#isCapitalized when all arguments are Strings with leading character as punctuation equal false?")
+    @Test
+    fun doesStringWithLeadingPunctuationCharacterToIsCapitalizedEqualFalse() {
+        arrayOf(
+            "-sometext",
+            ".testing",
+            ",foo",
+            " bar"
+        ).forEach { str ->
+            assertFalse(str.isCapitalized())
+        }
+    }
+
+    @DisplayName("Does String#capitalize when all arguments are Strings with leading character as punctuation equal the original String?")
+    @Test
+    fun doesStringWithLeadingPunctuationCharacterToCapitalizeFuncEqualOriginalString() {
+        arrayOf(
+            "-sometext",
+            ".testing",
+            ",foo",
+            " bar"
+        ).forEach { str ->
+            assertEquals(str.capitalize(), str)
+        }
+    }
+
+    // MARK: Percentage Tests
+
+    @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")
+    @Test
+    fun doesNonPercentStrNotMatchRegex() {
+        arrayOf(
+            "10", "%10", "10 %"
+        ).forEach {
+            assertFalse(it.isPercentage())
+        }
+    }
+
+    @DisplayName("Does a Percentage as a String Value Succeed in Matching the Percentage Regular Expression")
+    @Test
+    fun doesPercentStrMatchRegex() {
+        arrayOf(
+            "10%", "0.01%"
+        ).forEach {
+            assertTrue(it.isPercentage())
+        }
+    }
+
+    // MARK: Prefixes/Suffix Tests
+
+    @Test
+    fun doesStringToRemovePrefixesNeqOriginalString() {
+        arrayOf(
+            "'Leading apostrophe str",
+            "'Foobar",
+            "'foobarbaz"
+        ).forEach { str ->
+            assertNotEquals(str.removePrefixes("'"), str)
+        }
+    }
+
+    @Test
+    fun doesStringToRemoveSuffixesNeqOriginalString() {
+        arrayOf(
+            "Trailing apostrophe'",
+            "Another String, this time a trailing quote\"",
+            "This String with lose the trailing period."
+        ).forEach { str ->
+            assertNotEquals(str.removeSuffixes("'", "\"", "."), str)
+        }
+    }
+
+    // MARK: Quotation Tests
+
+    @DisplayName("Does String#dequoted when passed a quoted String not equal the original String?")
+    @Test
+    fun doesDequotedQuotedStrNeqOriginalQuotedStr() {
+        arrayOf(
+            "\"Some text within quotes\"",
+            "'Some more text within quotes'"
+        ).forEach {
+            assertNotEquals(it.dequoted(), it)
+        }
+    }
+
+    @DisplayName("Does String#dequoted when passed a non-quoted String equal the original String?")
+    @Test
+    fun doesDequotedNonQuotedStrEqOriginalStr() {
+        arrayOf(
+            "Some text not within quotes\"",
+            "\"Some text without a trailing quote",
+            "'Some more text bit within quotes",
+            "Some text with a trailing apostrophe'"
+        ).forEach {
+            assertEquals(it.dequoted(), it)
+        }
+    }
+
+    @DisplayName("Does String#quoted not equal the original String?")
+    @Test
+    fun doesStringToQuotedFuncNeqOriginalString() {
+        arrayOf(
+            "foobar",
+            "foo",
+            "bar",
+            "baz",
+            "qux"
+        ).forEach { str ->
+            assertNotEquals(str.quoted(), str)
+        }
     }
 }
