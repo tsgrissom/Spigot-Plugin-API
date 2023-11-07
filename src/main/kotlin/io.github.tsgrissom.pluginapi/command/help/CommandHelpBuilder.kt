@@ -42,6 +42,11 @@ class CommandHelpBuilder(context: CommandContext) {
         return this
     }
 
+    fun withSubcommands(vararg sub: SubcHelpBuilder) : CommandHelpBuilder {
+        subcommands.addAll(sub)
+        return this
+    }
+
     fun toComponents() : Array<BaseComponent> {
         val comp = ComponentBuilder()
             .append(getTitleAsComponent())
