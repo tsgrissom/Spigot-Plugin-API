@@ -20,7 +20,10 @@ class HoverableText(private var text: String) {
         fun compose(text: String) : HoverableText = HoverableText(text)
     }
 
-    private var autoscroll: Boolean = true
+    private var autoscroll = true
+    private var bold = false
+    private var italic = false
+    private var underline = false
     private var prependColor: ChatColor? = null
     private var hoverText: MutableList<String> = mutableListOf()
 
@@ -48,6 +51,21 @@ class HoverableText(private var text: String) {
      */
     fun autoscroll(b: Boolean) : HoverableText {
         this.autoscroll = b
+        return this
+    }
+
+    fun bold(b: Boolean) : HoverableText {
+        this.bold = b
+        return this
+    }
+
+    fun italic(b: Boolean) : HoverableText {
+        this.italic = b
+        return this
+    }
+
+    fun underline(b: Boolean) : HoverableText {
+        this.underline = b
         return this
     }
 
@@ -122,10 +140,17 @@ class HoverableText(private var text: String) {
      * @return The constructed TextComponent.
      */
     fun toComponent() : TextComponent {
-        val comp = TextComponent(text)
+        val text = TextComponent(text)
 
         if (prependColor != null)
-            comp.color = prependColor
+            text.color = prependColor
+
+        if (bold)
+            text.isBold = true
+        if (italic)
+            text.isItalic = true
+        if (underline)
+            text.isUnderlined = true
 
         if (hoverText.isNotEmpty()) {
             var onHover = ""
@@ -138,10 +163,10 @@ class HoverableText(private var text: String) {
             }
 
             val e = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text(onHover))
-            comp.hoverEvent = e
+            text.hoverEvent = e
         }
 
-        return comp
+        return text
     }
 
     /**

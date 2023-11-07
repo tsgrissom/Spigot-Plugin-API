@@ -18,6 +18,9 @@ class ClickableText(
 
     private var prependColor: ChatColor? = null
     private val hoverText = mutableListOf<String>()
+    private var bold = false
+    private var italic = false
+    private var underline = false
 
     companion object {
 
@@ -43,6 +46,11 @@ class ClickableText(
         return this
     }
 
+    fun bold(b: Boolean) : ClickableText {
+        this.bold = b
+        return this
+    }
+
     /**
      * Chainable. Sets a ChatColor to prepend to the text value when the TextComponent is displayed to the user.
      * @param c The Bungee ChatColor to prepend to the text when the TextComponent is created
@@ -50,6 +58,11 @@ class ClickableText(
      */
     fun color(c: ChatColor) : ClickableText {
         this.prependColor = c
+        return this
+    }
+
+    fun italics(b: Boolean) : ClickableText {
+        this.italic = b
         return this
     }
 
@@ -61,6 +74,11 @@ class ClickableText(
      */
     fun text(s: String) : ClickableText {
         this.text = s
+        return this
+    }
+
+    fun underline(b: Boolean) : ClickableText {
+        this.underline = b
         return this
     }
 
@@ -136,6 +154,12 @@ class ClickableText(
 
         if (prependColor != null)
             text.color = prependColor
+        if (bold)
+            text.isBold = true
+        if (italic)
+            text.isItalic = true
+        if (underline)
+            text.isUnderlined = true
         if (hoverEvent != null)
             text.hoverEvent = hoverEvent
 
