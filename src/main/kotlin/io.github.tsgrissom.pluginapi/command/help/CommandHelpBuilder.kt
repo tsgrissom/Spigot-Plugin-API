@@ -20,19 +20,24 @@ private fun CommandSender.hasPermission(permission: Permission?): Boolean {
         !this.hasPermission(permission)
 }
 
-class CommandHelpGenerator(val context: CommandContext) {
+class CommandHelpBuilder(context: CommandContext) {
 
     private val label: String = context.label
     private val sender: CommandSender = context.sender
     private val aliases: MutableList<String> = mutableListOf()
-    private val subcommands: MutableList<SubcommandHelp> = mutableListOf()
+    private val subcommands: MutableList<SubcHelpBuilder> = mutableListOf()
 
-    fun withAliases(vararg s: String) : CommandHelpGenerator {
+    companion object {
+        fun start(context: CommandContext) =
+            CommandHelpBuilder(context)
+    }
+
+    fun withAliases(vararg s: String) : CommandHelpBuilder {
         aliases.addAll(s)
         return this
     }
 
-    fun withSubcommand(sub: SubcommandHelp) : CommandHelpGenerator {
+    fun withSubcommand(sub: SubcHelpBuilder) : CommandHelpBuilder {
         subcommands.add(sub)
         return this
     }
@@ -53,6 +58,8 @@ class CommandHelpGenerator(val context: CommandContext) {
         titleComponent.color = GOLD
         punctuationComponent.color = GRAY
         labelComponent.color = YELLOW
+        if (aliases.isNotEmpty())
+            labelComponent.isUnderlined = true
 
         if (aliases.isNotEmpty()) {
             val hoverBuilder = ComponentBuilder()
@@ -75,7 +82,7 @@ class CommandHelpGenerator(val context: CommandContext) {
         return comp
     }
 
-    private fun getSubcommandAsComponent(sub: SubcommandHelp) : TextComponent {
+    private fun getSubcommandAsComponent(sub: SubcHelpBuilder) : TextComponent {
         val nameAsComponent = sub.toComponent()
         val text = TextComponent()
         val prefix = TextComponent("> ")

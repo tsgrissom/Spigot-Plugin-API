@@ -10,49 +10,50 @@ import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.permissions.Permission
 
-class SubcommandHelp(val name: String) {
+class SubcHelpBuilder(val name: String) {
 
-    companion object {
-        fun compose(name: String) = SubcommandHelp(name)
-    }
-
-    val arguments: MutableList<SubcommandArgumentHelp> = mutableListOf()
+    val arguments: MutableList<SubcParameterBuilder> = mutableListOf()
     val description: MutableList<String> = mutableListOf()
     private var aliases: MutableList<String> = mutableListOf()
     var permission: Permission? = null
     private var suggestionOnClick: String? = null
 
-    fun withAliases(vararg s: String) : SubcommandHelp {
+    companion object {
+        fun start(name: String) =
+            SubcHelpBuilder(name)
+    }
+
+    fun withAliases(vararg s: String) : SubcHelpBuilder {
         aliases.addAll(s)
         return this
     }
 
-    fun withArgument(arg: SubcommandArgumentHelp) : SubcommandHelp {
+    fun withArgument(arg: SubcParameterBuilder) : SubcHelpBuilder {
         arguments.add(arg)
         return this
     }
 
-    fun withDescription(vararg s: String) : SubcommandHelp {
+    fun withDescription(vararg s: String) : SubcHelpBuilder {
         description.addAll(s)
         return this
     }
 
-    fun withPermission(s: String) : SubcommandHelp {
+    fun withPermission(s: String) : SubcHelpBuilder {
         permission = Permission(s)
         return this
     }
 
-    fun withPermission(p: Permission) : SubcommandHelp {
+    fun withPermission(p: Permission) : SubcHelpBuilder {
         permission = p
         return this
     }
 
-    fun withSuggestion(data: String) : SubcommandHelp {
+    fun withSuggestion(data: String) : SubcHelpBuilder {
         suggestionOnClick = data
         return this
     }
 
-    fun clearSuggestion() : SubcommandHelp {
+    fun clearSuggestion() : SubcHelpBuilder {
         suggestionOnClick = null
         return this
     }
@@ -63,6 +64,7 @@ class SubcommandHelp(val name: String) {
         if (suggestionOnClick != null) {
             val onClick = ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, suggestionOnClick)
             text.clickEvent = onClick
+            text.isUnderlined = true
 
             if (aliases.isEmpty()) {
                 val onHover = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text("${GRAY}Click to suggest command"))
