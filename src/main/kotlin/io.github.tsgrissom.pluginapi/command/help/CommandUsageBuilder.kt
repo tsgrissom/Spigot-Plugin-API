@@ -1,10 +1,10 @@
 package io.github.tsgrissom.pluginapi.command.help
 
+import BungeeChatColor
 import io.github.tsgrissom.pluginapi.command.CommandContext
+import net.md_5.bungee.api.ChatColor.*
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ComponentBuilder
-import net.md_5.bungee.api.ChatColor as BungeeChatColor
-import org.bukkit.ChatColor
 
 /*
  * Should be able to generate a few types of command usage texts
@@ -18,9 +18,9 @@ class CommandUsageBuilder(
 ) {
     // TODO Implement CommandUsageGenerator
 
-    val arguments = mutableListOf<SubcParameterBuilder>()
-    val colorPrimary: BungeeChatColor = BungeeChatColor.GOLD
-    val colorDetail: BungeeChatColor = BungeeChatColor.RED
+    private val arguments = mutableListOf<SubcParameterBuilder>()
+    private val colorPrimary: BungeeChatColor = GOLD
+    private val colorDetail: BungeeChatColor = RED
 
     companion object {
         fun start(context: CommandContext) =

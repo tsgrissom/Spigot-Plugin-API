@@ -1,8 +1,9 @@
 package io.github.tsgrissom.pluginapi.extension.bukkit
 
+import BukkitChatColor
+import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.kt.equalsIc
 import io.github.tsgrissom.pluginapi.func.NonFormattingChatColorPredicate
-import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.Bukkit
@@ -15,7 +16,7 @@ import org.bukkit.Material
  * that a user might enter with the intent of using the receiver ChatColor.
  * @return A Set of Strings representing the receiver ChatColor.
  */
-fun org.bukkit.ChatColor.getValidInputAliases() : Set<String> {
+fun BukkitChatColor.getValidInputAliases() : Set<String> {
     val set = mutableSetOf<String>()
     val name = this.name
     val code = this.char
@@ -41,7 +42,7 @@ fun org.bukkit.ChatColor.getValidInputAliases() : Set<String> {
  * @param str The String to test.
  * @return Whether the provided string is an input alias for the ChatColor.
  */
-fun org.bukkit.ChatColor.isInputAlias(str: String) : Boolean {
+fun BukkitChatColor.isInputAlias(str: String) : Boolean {
     val valid = getValidInputAliases()
 
     for (alias in valid) {
@@ -57,10 +58,10 @@ fun org.bukkit.ChatColor.isInputAlias(str: String) : Boolean {
  * support formatting chat colors.
  * @return A Bungee ChatColor or null.
  */
-fun org.bukkit.ChatColor.convertToBungeeChatColor(): ChatColor? {
+fun BukkitChatColor.convertToBungeeChatColor(): BungeeChatColor? {
     val formattingColors = org.bukkit.ChatColor.entries.filterNot { NonFormattingChatColorPredicate().test(it) }.toList()
     val name = this.name
-    fun warnAndNull(str: String) : ChatColor? {
+    fun warnAndNull(str: String) : BungeeChatColor? {
         Bukkit.getLogger().warning(str)
         return null
     }
@@ -68,7 +69,7 @@ fun org.bukkit.ChatColor.convertToBungeeChatColor(): ChatColor? {
     if (formattingColors.contains(this))
         return warnAndNull("Cannot convert Bukkit ChatColor.${name} to a BungeeChatColor: Formatting codes are not able to be converted")
 
-    return ChatColor.of(name) ?: warnAndNull("Unable to resolve BungeeChatColor for name \"$name\"")
+    return BungeeChatColor.of(name) ?: warnAndNull("Unable to resolve BungeeChatColor for name \"$name\"")
 }
 // TODO Convert to Bungee ChatColor and vice-versa
 
@@ -76,24 +77,24 @@ fun org.bukkit.ChatColor.convertToBungeeChatColor(): ChatColor? {
  * Attempts to match the ChatColor to a Material to represent it in GUIs. Falls back to glass if no matches are made.
  * @return The best matching Material for the ChatColor.
  */
-fun org.bukkit.ChatColor.getRepresentativeMaterial() : Material {
+fun BukkitChatColor.getRepresentativeMaterial() : Material {
     val def = Material.GLASS
     val name = this.name
     val special = mapOf(
-        org.bukkit.ChatColor.GREEN to Material.LIME_WOOL,
-        org.bukkit.ChatColor.DARK_GREEN to Material.GREEN_WOOL,
-        org.bukkit.ChatColor.AQUA to Material.LIGHT_BLUE_WOOL,
-        org.bukkit.ChatColor.DARK_AQUA to Material.CYAN_WOOL,
-        org.bukkit.ChatColor.BLUE to Material.BLUE_CONCRETE_POWDER,
-        org.bukkit.ChatColor.DARK_BLUE to Material.BLUE_WOOL,
-        org.bukkit.ChatColor.RED to Material.RED_WOOL,
-        org.bukkit.ChatColor.DARK_RED to Material.REDSTONE_BLOCK,
-        org.bukkit.ChatColor.GRAY to Material.LIGHT_GRAY_WOOL,
-        org.bukkit.ChatColor.DARK_GRAY to Material.GRAY_WOOL,
-        org.bukkit.ChatColor.GOLD to Material.YELLOW_WOOL,
-        org.bukkit.ChatColor.YELLOW to Material.GOLD_BLOCK,
-        org.bukkit.ChatColor.LIGHT_PURPLE to Material.PURPLE_WOOL,
-        org.bukkit.ChatColor.DARK_PURPLE to Material.PURPLE_CONCRETE
+        BukkitChatColor.GREEN to Material.LIME_WOOL,
+        BukkitChatColor.DARK_GREEN to Material.GREEN_WOOL,
+        BukkitChatColor.AQUA to Material.LIGHT_BLUE_WOOL,
+        BukkitChatColor.DARK_AQUA to Material.CYAN_WOOL,
+        BukkitChatColor.BLUE to Material.BLUE_CONCRETE_POWDER,
+        BukkitChatColor.DARK_BLUE to Material.BLUE_WOOL,
+        BukkitChatColor.RED to Material.RED_WOOL,
+        BukkitChatColor.DARK_RED to Material.REDSTONE_BLOCK,
+        BukkitChatColor.GRAY to Material.LIGHT_GRAY_WOOL,
+        BukkitChatColor.DARK_GRAY to Material.GRAY_WOOL,
+        BukkitChatColor.GOLD to Material.YELLOW_WOOL,
+        BukkitChatColor.YELLOW to Material.GOLD_BLOCK,
+        BukkitChatColor.LIGHT_PURPLE to Material.PURPLE_WOOL,
+        BukkitChatColor.DARK_PURPLE to Material.PURPLE_CONCRETE
     )
 
     if (special.contains(this))
@@ -112,7 +113,7 @@ fun org.bukkit.ChatColor.getRepresentativeMaterial() : Material {
  * @param color The ChatColor to append to the ComponentBuilder after appending the String.
  * @return The ComponentBuilder instance to continue method chaining.
  */
-fun ComponentBuilder.appendc(str: String, color: ChatColor) : ComponentBuilder =
+fun ComponentBuilder.appendc(str: String, color: BungeeChatColor) : ComponentBuilder =
     this.append(str).color(color)
 
 /**
@@ -123,5 +124,5 @@ fun ComponentBuilder.appendc(str: String, color: ChatColor) : ComponentBuilder =
  * @param color The ChatColor to append to the ComponentBuilder after appending the text.
  * @return The ComponentBuilder instance to continue method chaining.
  */
-fun ComponentBuilder.appendc(text: TextComponent, color: ChatColor) : ComponentBuilder =
+fun ComponentBuilder.appendc(text: TextComponent, color: BungeeChatColor) : ComponentBuilder =
     this.append(text).color(color)

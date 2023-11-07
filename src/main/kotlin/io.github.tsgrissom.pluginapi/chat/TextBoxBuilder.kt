@@ -1,12 +1,13 @@
 package io.github.tsgrissom.pluginapi.chat
 
+import BungeeChatColor
+import net.md_5.bungee.api.ChatColor.*
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.TextComponent
-import net.md_5.bungee.api.ChatColor as BungeeChatColor
 
 class TextBoxBuilder(
-    private val decorationColor: BungeeChatColor = BungeeChatColor.GRAY,
+    private val decorationColor: BungeeChatColor = GRAY,
     private val withColor: Boolean = true,
     private val decorationPrefix: String = " ",
     private val decorationChar: Char = '-',

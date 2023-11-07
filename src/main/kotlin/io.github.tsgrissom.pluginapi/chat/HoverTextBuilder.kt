@@ -1,7 +1,7 @@
 package io.github.tsgrissom.pluginapi.chat
 
+import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.kt.translateColor
-import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
@@ -24,7 +24,7 @@ class HoverTextBuilder(private var text: String) {
     private var bold = false
     private var italic = false
     private var underline = false
-    private var prependColor: ChatColor? = null
+    private var prependColor: BungeeChatColor? = null
     private var hoverText: MutableList<String> = mutableListOf()
 
     /**
@@ -75,7 +75,7 @@ class HoverTextBuilder(private var text: String) {
      * @param c The Bungee ChatColor to prepend to the text when the TextComponent is created.
      * @return The instance of HoverTextBuilder for further building.
      */
-    fun color(c: ChatColor) : HoverTextBuilder {
+    fun color(c: BungeeChatColor) : HoverTextBuilder {
         this.prependColor = c
         return this
     }

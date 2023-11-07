@@ -1,19 +1,20 @@
 package io.github.tsgrissom.pluginapi.utility
 
+import BukkitChatColor
+import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.bukkit.getDynamicHoverEvent
-import net.md_5.bungee.api.ChatColor as BungeeChatColor
 import net.md_5.bungee.api.chat.BaseComponent
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
-import org.bukkit.ChatColor
 
 class StringUtility {
 
     /**
      * TODO Generate multi-line list
+     * TODO Convert to objects in chat package
      */
     companion object {
         fun createFormattedList(
@@ -21,12 +22,12 @@ class StringUtility {
             collection: Collection<String>,
             withColor: Boolean = true,
             delimiter: String = ", ",
-            colorPrimary: ChatColor = ChatColor.GOLD,
-            colorPunctuation: ChatColor = ChatColor.DARK_GRAY,
-            colorValue: ChatColor = ChatColor.YELLOW
+            colorPrimary: BukkitChatColor     = BukkitChatColor.GOLD,
+            colorPunctuation: BukkitChatColor = BukkitChatColor.DARK_GRAY,
+            colorValue: BukkitChatColor       = BukkitChatColor.YELLOW
         ) : String {
             var str = ""
-            fun appendColorIf(color: ChatColor) {
+            fun appendColorIf(color: BukkitChatColor) {
                 if (withColor)
                     str += color.toString()
             }
@@ -38,7 +39,7 @@ class StringUtility {
             str += ": "
 
             if (collection.isEmpty()) {
-                appendColorIf(ChatColor.RED)
+                appendColorIf(BukkitChatColor.RED)
                 str += "None"
                 return str
             }
@@ -62,7 +63,7 @@ class StringUtility {
         ) : String {
             return createFormattedList(
                 name, collection, delimiter=delimiter,
-                colorPrimary=ChatColor.WHITE, colorPunctuation=ChatColor.WHITE, colorValue=ChatColor.WHITE
+                colorPrimary=BukkitChatColor.WHITE, colorPunctuation=BukkitChatColor.WHITE, colorValue=BukkitChatColor.WHITE
             )
         }
 

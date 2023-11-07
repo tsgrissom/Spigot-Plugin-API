@@ -1,8 +1,8 @@
 package io.github.tsgrissom.pluginapi.chat
 
+import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.bukkit.getDynamicHoverEvent
 import io.github.tsgrissom.pluginapi.extension.kt.translateColor
-import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ClickEvent.Action.*
 import net.md_5.bungee.api.chat.HoverEvent
@@ -16,7 +16,7 @@ class ClickTextBuilder(
     private var value: String?
 ) {
 
-    private var prependColor: ChatColor? = null
+    private var prependColor: BungeeChatColor? = null
     private val hoverText = mutableListOf<String>()
     private var bold = false
     private var italic = false
@@ -56,7 +56,7 @@ class ClickTextBuilder(
      * @param c The Bungee ChatColor to prepend to the text when the TextComponent is created
      * @return The instance of ClickTextBuilder for further building.
      */
-    fun color(c: ChatColor) : ClickTextBuilder {
+    fun color(c: BungeeChatColor) : ClickTextBuilder {
         this.prependColor = c
         return this
     }
