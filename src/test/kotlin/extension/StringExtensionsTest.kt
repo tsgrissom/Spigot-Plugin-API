@@ -132,6 +132,17 @@ class StringExtensionsTest : PAPIPluginTest() {
     fun capitalize_shouldEqualOriginalStrWhenValuesHaveLeadingCharacterAsPunctuation(value: String) =
         assertEquals(value.capitalize(), value)
 
+    @DisplayName("Does String#capitalizeEachWordAllCaps not equal the original String?")
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "HELLO",
+        "HELLO_WORLD",
+        "FOO_BAR",
+        "FOO_BAZ"
+    ])
+    fun capitalizeEachWordAllCaps_shouldNeqOriginalStr(value: String) =
+        assertNotEquals(value.capitalizeEachWordAllCaps(), value)
+
     // MARK: Percentage Tests
 
     @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")

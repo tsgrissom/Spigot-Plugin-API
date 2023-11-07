@@ -163,8 +163,12 @@ fun String.removeSuffixes(
     return s
 }
 
-fun String.isCapitalized() : Boolean =
-    this[0].isUpperCase()
+fun String.isCapitalized() : Boolean {
+    if (this.trim().isEmpty())
+        return false
+
+    return this[0].isUpperCase()
+}
 
 /**
  * Capitalizes a String by only altering the first letter. Alternate method offered
