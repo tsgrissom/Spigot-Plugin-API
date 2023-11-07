@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.github.tsgrissom.pluginapi.extension.bukkit
 
 import io.github.tsgrissom.pluginapi.extension.kt.translateColor
@@ -68,6 +70,7 @@ fun ItemStack.color(color: Color): ItemStack {
  * @param data The new data of the ItemStack.
  * @return The instance of ItemStack.
  */
+@Suppress("DEPRECATION")
 fun ItemStack.data(data: Int): ItemStack {
     setData(MaterialData(type, data.toByte()))
     return this
@@ -229,6 +232,6 @@ inline val Material.isMinecart: Boolean
 inline val Material.isVehicle: Boolean
     get() = this.isBoat || this.isMinecart
 inline val Material.isWater: Boolean
-    get() = this == Material.WATER || this == Material.LEGACY_STATIONARY_WATER
+    get() = this == Material.WATER
 inline val Material.isLava: Boolean
-    get() = this == Material.LAVA || this == Material.LEGACY_STATIONARY_LAVA
+    get() = this == Material.LAVA
