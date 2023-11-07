@@ -10,7 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.command.CommandSender
 
-class ClickableText(
+class ClickTextBuilder(
     private var text: String,
     private var action: ClickEvent.Action = COPY_TO_CLIPBOARD,
     private var value: String?
@@ -25,11 +25,11 @@ class ClickableText(
     companion object {
 
         /**
-         * Begin creating a ClickableText via this static method.
-         * @return A new ClickableText instance for the provided text.
+         * Begin creating a ClickTextBuilder via this static method.
+         * @return A new ClickTextBuilder instance for the provided text.
          */
-        fun compose(text: String) : ClickableText =
-            ClickableText(text,"https://apple.com")
+        fun start(text: String) : ClickTextBuilder =
+            ClickTextBuilder(text,"https://apple.com")
     }
 
     constructor(text: String, value: String) : this(text, COPY_TO_CLIPBOARD, value)
@@ -39,14 +39,14 @@ class ClickableText(
      * Chainable. Sets the `ClickEvent.Action` which will be invoked when the user clicks on this TextComponent
      * in their chat box.
      * @param a The Action to invoke when the user clicks on the TextComponent.
-     * @return The instance of ClickableText for further building.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun action(a: ClickEvent.Action) : ClickableText {
+    fun action(a: ClickEvent.Action) : ClickTextBuilder {
         this.action = a
         return this
     }
 
-    fun bold(b: Boolean) : ClickableText {
+    fun bold(b: Boolean) : ClickTextBuilder {
         this.bold = b
         return this
     }
@@ -54,30 +54,30 @@ class ClickableText(
     /**
      * Chainable. Sets a ChatColor to prepend to the text value when the TextComponent is displayed to the user.
      * @param c The Bungee ChatColor to prepend to the text when the TextComponent is created
-     * @return The instance of ClickableText for further building.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun color(c: ChatColor) : ClickableText {
+    fun color(c: ChatColor) : ClickTextBuilder {
         this.prependColor = c
         return this
     }
 
-    fun italics(b: Boolean) : ClickableText {
+    fun italics(b: Boolean) : ClickTextBuilder {
         this.italic = b
         return this
     }
 
     /**
      * Chainable. Sets a String to the text value of the object to be displayed when the TextComponent is served to the
-     * user. Use `ClickableText#color` to prepend a color for the TextComponent.
+     * user. Use `ClickTextBuilder#color` to prepend a color for the TextComponent.
      * @param s The String to serve to the Player when the TextComponent is displayed.
-     * @return The instance of ClickableText for further building
+     * @return The instance of ClickTextBuilder for further building
      */
-    fun text(s: String) : ClickableText {
+    fun text(s: String) : ClickTextBuilder {
         this.text = s
         return this
     }
 
-    fun underline(b: Boolean) : ClickableText {
+    fun underline(b: Boolean) : ClickTextBuilder {
         this.underline = b
         return this
     }
@@ -86,31 +86,31 @@ class ClickableText(
      * Chainable. Sets a String to the data value of the object which will be acted on by the `ClickEvent.Action` when
      * the user clicks on the TextComponent. Can be a URL to be copied, a command to be executed, etc.
      * @param s The String data value to attach to the action of the TextComponent.
-     * @return The instance of ClickableText for further building.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun value(s: String) : ClickableText {
+    fun value(s: String) : ClickTextBuilder {
         this.value = s
         return this
     }
 
     /**
      * Chainable. Adds hover text which, if present, overrides the default hover text which is derived from the type of
-     * action attached to the ClickableText.
+     * action attached to the ClickTextBuilder.
      * @param l The String values to add to the hover text to be displayed on the TextComponent. Supports `&` color.
-     * @return The instance of ClickableText for further building.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun hoverText(l: List<String>) : ClickableText {
+    fun hoverText(l: List<String>) : ClickTextBuilder {
         this.hoverText.addAll(l.translateColor())
         return this
     }
 
     /**
      * Chainable. Adds hover text which, if present, overrides the default hover text which is derived from the type of
-     * action attached to the ClickableText.
+     * action attached to the ClickTextBuilder.
      * @param s The String values to add to the hover text to be displayed on the TextComponent. Supports `&` color.
-     * @return The instance of ClickableText for further building.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun hoverText(vararg s: String) : ClickableText {
+    fun hoverText(vararg s: String) : ClickTextBuilder {
         this.hoverText.addAll(s.map { it.translateColor() })
         return this
     }
@@ -118,11 +118,11 @@ class ClickableText(
     /**
      * Chainable. Clears the existing hover text and adds the new text, effectively setting the contents of what is an
      * immutable non-null type. If custom hover text is present, it overrides the default hover text which is
-     * derived from the type of action attached to the ClickableText.
+     * derived from the type of action attached to the ClickTextBuilder.
      * @param l The new String values to appear when hovering over the TextComponent. Supports `&` color.
-     * @return The instance of ClickableText for further building.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun setHoverText(l: List<String>) : ClickableText {
+    fun setHoverText(l: List<String>) : ClickTextBuilder {
         this.hoverText.clear()
         this.hoverText.addAll(l.translateColor())
         return this
@@ -130,16 +130,16 @@ class ClickableText(
 
     /**
      * Chainable. Clears the existing hover text. An empty hover text list will be overridden by the default hover text,
-     * derived from the action type of the ClickableText.
-     * @return The instance of ClickableText for further building.
+     * derived from the action type of the ClickTextBuilder.
+     * @return The instance of ClickTextBuilder for further building.
      */
-    fun resetHoverText() : ClickableText {
+    fun resetHoverText() : ClickTextBuilder {
         this.hoverText.clear()
         return this
     }
 
     /**
-     * Builds the completed ClickableText into a TextComponent. This TextComponent can be safely inserted into another
+     * Builds the completed ClickTextBuilder into a TextComponent. This TextComponent can be safely inserted into another
      * TextComponent, a ComponentBuilder, or sent by itself.
      * @return The constructed TextComponent.
      */
@@ -167,7 +167,7 @@ class ClickableText(
     }
 
     /**
-     * Invokes `ClickableText#toComponent()` and sends the constructed TextComponent to the supplied CommandSender.
+     * Invokes `ClickTextBuilder#toComponent()` and sends the constructed TextComponent to the supplied CommandSender.
      * @param to Who to send the constructed TextComponent to.
      */
     fun send(to: CommandSender) {

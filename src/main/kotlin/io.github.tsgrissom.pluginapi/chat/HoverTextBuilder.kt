@@ -9,15 +9,15 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
 import org.bukkit.entity.Player
 
-class HoverableText(private var text: String) {
+class HoverTextBuilder(private var text: String) {
 
     companion object {
 
         /**
-         * Begin creating a HoverableText via this static method.
-         * @return A new HoverableText instance for the provided text.
+         * Begin creating a HoverTextBuilder via this static method.
+         * @return A new HoverTextBuilder instance for the provided text.
          */
-        fun compose(text: String) : HoverableText = HoverableText(text)
+        fun compose(text: String) : HoverTextBuilder = HoverTextBuilder(text)
     }
 
     private var autoscroll = true
@@ -47,24 +47,24 @@ class HoverableText(private var text: String) {
      * Chainable. Sets whether to append newline characters between each line of the hover
      * text so that each separate String is automatically on a new line. Default true.
      * @param b Whether to append newline characters between each line of the hover text.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun autoscroll(b: Boolean) : HoverableText {
+    fun autoscroll(b: Boolean) : HoverTextBuilder {
         this.autoscroll = b
         return this
     }
 
-    fun bold(b: Boolean) : HoverableText {
+    fun bold(b: Boolean) : HoverTextBuilder {
         this.bold = b
         return this
     }
 
-    fun italic(b: Boolean) : HoverableText {
+    fun italic(b: Boolean) : HoverTextBuilder {
         this.italic = b
         return this
     }
 
-    fun underline(b: Boolean) : HoverableText {
+    fun underline(b: Boolean) : HoverTextBuilder {
         this.underline = b
         return this
     }
@@ -73,21 +73,21 @@ class HoverableText(private var text: String) {
      * Chainable. Sets a ChatColor to prepend to the text value when the TextComponent is
      * displayed to the user.
      * @param c The Bungee ChatColor to prepend to the text when the TextComponent is created.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun color(c: ChatColor) : HoverableText {
+    fun color(c: ChatColor) : HoverTextBuilder {
         this.prependColor = c
         return this
     }
 
     /**
      * Chainable. Sets a String to the text value of the object to be displayed when the
-     * TextComponent is served to the user. Use `HoverableText#color` to set the
+     * TextComponent is served to the user. Use `HoverTextBuilder#color` to set the
      * TextComponent's color property.
      * @param s The String to serve to the Player when the TextComponent is displayed.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun text(s: String) : HoverableText {
+    fun text(s: String) : HoverTextBuilder {
         this.text = s
         return this
     }
@@ -96,9 +96,9 @@ class HoverableText(private var text: String) {
      * Chainable. Adds hover text to be displayed when the user hovers over the TextComponent
      * in their chat box.
      * @param l The String values to add to the hover text to be displayed on the TextComponent.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun hoverText(l: List<String>) : HoverableText {
+    fun hoverText(l: List<String>) : HoverTextBuilder {
         this.hoverText.addAll(l.map { it.translateColor() })
         return this
     }
@@ -107,9 +107,9 @@ class HoverableText(private var text: String) {
      * Chainable. Adds hover text to be displayed when the user hovers over the TextComponent
      * in their chat box.
      * @param s The String values to add to the hover text to be displayed on the TextComponent.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun hoverText(vararg s: String) : HoverableText {
+    fun hoverText(vararg s: String) : HoverTextBuilder {
         this.hoverText.addAll(s.map { it.translateColor() })
         return this
     }
@@ -117,9 +117,9 @@ class HoverableText(private var text: String) {
     /**
      * Chainable. Clears the existing hover text and adds the new text.
      * @param l The new String values to appear when hovering over the TextComponent.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun setHoverText(l: List<String>) : HoverableText {
+    fun setHoverText(l: List<String>) : HoverTextBuilder {
         this.hoverText.clear()
         this.hoverText.addAll(l.translateColor())
         return this
@@ -127,15 +127,15 @@ class HoverableText(private var text: String) {
 
     /**
      * Chainable. Clears the existing hover text.
-     * @return The instance of HoverableText for further building.
+     * @return The instance of HoverTextBuilder for further building.
      */
-    fun resetHoverText() : HoverableText {
+    fun resetHoverText() : HoverTextBuilder {
         this.hoverText.clear()
         return this
     }
 
     /**
-     * Builds the completed HoverableText into a TextComponent. This TextComponent can be
+     * Builds the completed HoverTextBuilder into a TextComponent. This TextComponent can be
      * safely inserted into another TextComponent, a ComponentBuilder, or sent by itself.
      * @return The constructed TextComponent.
      */
@@ -170,7 +170,7 @@ class HoverableText(private var text: String) {
     }
 
     /**
-     * Invokes `HoverableText#toComponent()` and sends the constructed TextComponent
+     * Invokes `HoverTextBuilder#toComponent()` and sends the constructed TextComponent
      * to the supplied CommandSender.
      * @param to Who to send the constructed TextComponent to.
      */

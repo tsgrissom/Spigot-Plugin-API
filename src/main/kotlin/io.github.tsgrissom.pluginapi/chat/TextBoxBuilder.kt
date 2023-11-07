@@ -16,6 +16,11 @@ class TextBoxBuilder(
 
     private val contents: MutableList<TextComponent> = mutableListOf()
 
+    companion object {
+        fun start(decorationColor: BungeeChatColor) : TextBoxBuilder =
+            TextBoxBuilder(decorationColor=decorationColor)
+    }
+
     fun withLine(vararg text: TextComponent) : TextBoxBuilder {
         this.contents.addAll(text)
         return this
