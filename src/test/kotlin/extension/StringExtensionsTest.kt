@@ -145,27 +145,33 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     // MARK: Miscellaneous Mutation Tests
 
+    @DisplayName("Does String#truncate not end with the postfix token when the trimmed value's width is less than the max width of the truncation?")
     @ParameterizedTest
     @ValueSource(strings=[
         "Text  ",
         "Another     "
     ])
-    fun truncate_shouldNotEndWithEllipsesWhenLessThanMaxWidthAfterTrim(value: String) =
-        assertFalse(value.truncate(12, trimBefore=true, postfix="...").endsWith("..."))
+    fun truncate_shouldNotEndWithEllipsesWhenLessThanMaxWidthAfterTrim(value: String) {
+        val postfix = "..."
+        val newValue = value.truncate(12, trimBefore=true, postfix=postfix)
+        assertFalse(newValue.endsWith(postfix), "\"$newValue\" ends with $postfix")
+    }
 
+    @DisplayName("Does String#truncate end with the postfix token when the value's width exceeds the max width of the truncation?")
     @ParameterizedTest
     @ValueSource(strings=[
         "Some long text with trailing whitespace",
         "Something with extended test foobar",
     ])
     fun truncate_shouldEndWithEllipsesWhenGreaterThanMaxWidth(value: String) {
-        val truncated = value.truncate(12)
-        assertTrue(truncated.endsWith("..."), "\"$truncated\" does not end with ...®")
+        val postfix = "..."
+        val newValue = value.truncate(12, postfix=postfix)
+        assertTrue(newValue.endsWith(postfix), "\"$newValue\" does not end with $postfix")
     }
 
     // MARK: Percentage Tests
 
-    @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")
+    @DisplayName("Does String#isPercent equal false when the value is an invalid percentage expressed as a String?")
     @ParameterizedTest
     @ValueSource(strings=[
         "10",
@@ -176,7 +182,7 @@ class StringExtensionsTest : PAPIPluginTest() {
     fun isPercent_shouldBeFalseWhenValuesAreNotPercentagesAsStrings(value: String) =
         assertFalse(value.isPercentage())
 
-    @DisplayName("Does a Percentage as a String Value Succeed in Matching the Percentage Regular Expression")
+    @DisplayName("Does String#isPercent equal true when the value is a percentage expressed as a String?")
     @ParameterizedTest
     @ValueSource(strings=[
         "10%",
@@ -187,6 +193,7 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     // MARK: Prefixes/Suffix Tests
 
+    @DisplayName("Does String#wrap start and end with the wrapping token?")
     @ParameterizedTest
     @ValueSource(strings=[
         "Foobar",
@@ -196,9 +203,11 @@ class StringExtensionsTest : PAPIPluginTest() {
     fun wrap_shouldStartAndEndWithToken(value: String) {
         val token = "\""
         val newValue = value.wrap(token)
-        assertTrue(newValue.startsWith(token) && newValue.endsWith(token))
+        assertTrue(newValue.startsWith(token))
+        assertTrue(newValue.endsWith(token))
     }
 
+    @DisplayName("Does the new value of String#wrapIfMissing equal the original value when the latter is already wrapped with the wrapping character?")
     @ParameterizedTest
     @ValueSource(strings=[
         "\"Some text that is already quoted\"",
@@ -213,6 +222,7 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     // TODO Test bothOrNone parameter of String#wrapIfMissing
 
+    @DisplayName("Does the new value of String#unwrap not start and not end with the unwrapped character when the original value starts and ends with the character?")
     @ParameterizedTest
     @ValueSource(strings=[
         "dText wrapped in lowercase D charsd",
@@ -226,6 +236,7 @@ class StringExtensionsTest : PAPIPluginTest() {
         assertFalse(newValue.endsWith(char))
     }
 
+    @DisplayName("Does the new value of String#unwrap not start and not end with the unwrapped token when the original value starts and ends with the token?")
     @ParameterizedTest
     @ValueSource(strings=[
         "'Text within apostrophes'",
