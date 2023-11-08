@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 class CommandContextTest : PAPIPluginTest() {
 
     @Test
-    fun doesExecutedStringSplitBySpaceEqExpectedLength() {
+    fun getExecutedString_splitBySpaceShouldEqExpectedLength() {
         val expected = 4
         val mockContext = mockCommandContext("first", "second", "third")
         val executedStr = mockContext.getExecutedString()
@@ -16,7 +16,7 @@ class CommandContextTest : PAPIPluginTest() {
     }
 
     @Test
-    fun doesGetLengthEqLengthOfExecutedCommand() {
+    fun getLength_shouldEqExpectedLength() {
         val contextNoArgs = mockCommandContext()
         val contextSomeArgs = mockCommandContext("first", "second")
 
@@ -28,32 +28,30 @@ class CommandContextTest : PAPIPluginTest() {
     }
 
     @Test
-    fun doesGetAnyQuotedStringNeqNullWhenQuotedStringExists() {
+    fun getAnyQuotedString_shouldNeqNullWhenQuotedStringExists() =
         arrayOf(
             mockCommandContext("'This", "is", "some", "args", "in", "quotes'"),
             mockCommandContext("\"This", "is", "more", "args", "in", "quotes\""),
             mockCommandContext("'This", "should", "be'", "valid")
         ).forEach { assertNotNull(it.getAnyQuotedString()) }
-    }
 
     @Test
-    fun doesGetAnyQuotedStringEqNullWhenInvalidQuotedStringExists() {
+    fun getAnyQuotedString_shouldBeNullWhenInvalidQuotedStringExists() =
         arrayOf(
             mockCommandContext("'Some", "text", "with", "leading", "but", "no", "trailing"),
             mockCommandContext("Another\""),
             mockCommandContext("'This", "case", "is", "'invalid"),
             mockCommandContext("'Mixed", "quote", "chars", "invalidate\"")
         ).forEach { assertNull(it.getAnyQuotedString()) }
-    }
 
     @Test
-    fun doesGetQuotedStringFromArgsRangeNeqNullWhenValidIndicesPassed() {
+    fun getQuotedStringFromArgsRange_shouldBeNonNullWhenRangeOfArgsIsValidQuotedString() {
         val context = mockCommandContext("'This", "is", "quoted'", "with", "apostrophes")
         assertNotNull(context.getQuotedStringFromArgsRange(0, 2))
     }
 
     @Test
-    fun doesGetQuotedStringFromArgsRangeEqNullWhenInvalidIndicesPassed() {
+    fun getQuotedStringFromArgsRange_shouldBeNullWhenRangeIsInvalidQuotedString() {
         val context = mockCommandContext("'This", "is", "quoted'", "with", "apostrophes")
         assertNull(context.getQuotedStringFromArgsRange(0, 4))
     }

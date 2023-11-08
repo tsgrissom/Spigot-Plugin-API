@@ -43,6 +43,7 @@ fun String.equalsAny(vararg others: String) : Boolean =
 /**
  * Checks if the String is surrounded by the requisite String, optionally ignoring case-sensitivity.
  * @param str The String to check if it is surrounding the String being operated on.
+ * @param ignoreCase Whether to ignore case when checking if the String is wrapped. Default=false.
  * @return Whether the String is surrounded by the requisite String.
  */
 fun String.isWrappedWith(
@@ -54,6 +55,12 @@ fun String.isWrappedWith(
     return this.startsWith(str, ignoreCase=ignoreCase) && this.endsWith(str, ignoreCase=ignoreCase)
 }
 
+/**
+ * Checks if the String is wrapped by the same character. Takes the first character of the String and compares it to
+ * the last character of the String.
+ * @param ignoreCase Whether to ignore case when checking if the String is wrapped. Default=false.
+ * @return Whether the String is surrounded by the same character.
+ */
 fun String.isWrappedWithSameChar(ignoreCase: Boolean = false) : Boolean {
     if (this.isEmpty() || this.length == 1)
         return false
@@ -142,15 +149,33 @@ fun String.isDoubleQuoted() : Boolean =
 fun String.isQuoted() : Boolean =
     (this.isSingleQuoted() || this.isDoubleQuoted())
 
+/**
+ * Checks if the String is not surrounded by either kind of quote (single or double.)
+ * @return Whether the String is not quoted.
+ */
 fun String.isNotQuoted() : Boolean =
     !this.isQuoted()
 
+/**
+ * Wraps the String in quotation marks. By default, uses proper quotation mark characters. The String will not be
+ * wrapped if it is already wrapped in the requisite characters.
+ * @param single If enabled, apostrophes will be used to wrap the String instead of quotation marks.
+ * @return The String wrapped in quotes.
+ */
 fun String.quoted(single: Boolean = false) : String =
     if (single) this.singleQuoted() else this.doubleQuoted()
 
+/**
+ * Wraps the String in quotation marks if the String is not wrapped in them already.
+ * @return The String wrapped in quotation marks.
+ */
 fun String.doubleQuoted() : String =
     this.wrapIfMissing("\"", bothOrNone=true)
 
+/**
+ * Wraps the String in apostrophes if the String is not wrapped in them already.
+ * @return The String wrapped in apostrophes.
+ */
 fun String.singleQuoted() : String =
     this.wrapIfMissing("'", bothOrNone=true)
 
