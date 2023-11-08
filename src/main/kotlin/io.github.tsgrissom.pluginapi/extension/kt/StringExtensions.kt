@@ -2,7 +2,6 @@ package io.github.tsgrissom.pluginapi.extension.kt
 
 import io.github.tsgrissom.pluginapi.extension.bukkit.getValidInputAliases
 import io.github.tsgrissom.pluginapi.func.NonFormattingChatColorPredicate
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 
 /* MARK: Equality Checks */
@@ -46,23 +45,77 @@ fun String.equalsAny(vararg others: String) : Boolean =
  * @param str The String to check if it is surrounding the String being operated on.
  * @return Whether the String is surrounded by the requisite String.
  */
-fun String.startsAndEndsWith(
+fun String.isWrappedWith(
     str: String,
     ignoreCase: Boolean = false
 ) : Boolean {
-    if (this.isEmpty())
+    if (this.isEmpty() || this.length == 1)
         return false
     return this.startsWith(str, ignoreCase=ignoreCase) && this.endsWith(str, ignoreCase=ignoreCase)
 }
 
-fun String.startsAndEndsWithSameChar(ignoreCase: Boolean = false) : Boolean {
-    if (this.isEmpty())
+fun String.isWrappedWithSameChar(ignoreCase: Boolean = false) : Boolean {
+    if (this.isEmpty() || this.length == 1)
         return false
     return this.endsWith(this[0], ignoreCase=ignoreCase)
 }
 
-fun String.surroundWith(str: String) : String =
-    "$str$this$str"
+fun String.wrap(token: String) : String =
+    "$token$this$token"
+
+fun String.wrapIfMissing(wrapWith: Char, bothOrNone: Boolean = false) : String {
+    if (this.isEmpty())
+        return this
+    val wrapStart = this[0] != wrapWith
+    val wrapEnd = this[this.length - 1] != wrapWith
+    if (!wrapStart && !wrapEnd)
+        return this
+    if (bothOrNone && (!wrapStart || !wrapEnd))
+        return this
+
+    val pre  = if (wrapStart) wrapWith else ""
+    val post = if (wrapEnd) wrapWith else ""
+
+    return "$pre$this$post"
+}
+
+fun String.wrapIfMissing(wrapWith: String, bothOrNone: Boolean = false) : String {
+    if (this.isEmpty() || wrapWith.isEmpty())
+        return this
+
+    val wrapStart = !this.startsWith(wrapWith)
+    val wrapEnd = !this.endsWith(wrapWith)
+
+    if (!wrapStart && !wrapEnd)
+        return this
+    if (bothOrNone && (!wrapStart || !wrapEnd))
+        return this
+
+    val pre  = if (wrapStart) wrapWith else ""
+    val post = if (wrapEnd) wrapWith else ""
+
+    return "$pre$this$post"
+}
+
+fun String.unwrap(wrapWith: Char) : String {
+    if (this.isEmpty() || this.length == 1)
+        return this
+    val endIndex = this.length - 1
+    if (this[0] == wrapWith && this[endIndex] == wrapWith) {
+        return this.substring(1, endIndex)
+    }
+    return this
+}
+
+fun String.unwrap(wrapWith: String, ignoreCase: Boolean = false) : String {
+    val minLength = 2 * wrapWith.length
+    if (this.isEmpty() || wrapWith.isEmpty() || this.length < minLength)
+        return this
+    if (this.startsWith(wrapWith, ignoreCase=ignoreCase) && this.endsWith(wrapWith, ignoreCase=ignoreCase)) {
+        return this.substring(wrapWith.length, this.lastIndexOf(wrapWith, ignoreCase=ignoreCase))
+    }
+    return this
+}
 
 /**
  * Checks if the String is surrounded by single quotes. Determined by checking if
@@ -70,7 +123,7 @@ fun String.surroundWith(str: String) : String =
  * @return Whether the String is surrounded by single quotes.
  */
 fun String.isSingleQuoted() : Boolean =
-    this.startsAndEndsWith("'")
+    this.isWrappedWith("'")
 
 /**
  * Checks if the String is surrounded by double quotes. Determined by checking if
@@ -78,7 +131,7 @@ fun String.isSingleQuoted() : Boolean =
  * @return Whether the String is surrounded by double quotes.
  */
 fun String.isDoubleQuoted() : Boolean =
-    this.startsAndEndsWith("\"")
+    this.isWrappedWith("\"")
 
 /**
  * Checks if the String is surrounded by either kind of quote (single or double.)
@@ -96,10 +149,10 @@ fun String.quoted(single: Boolean = false) : String =
     if (single) this.singleQuoted() else this.doubleQuoted()
 
 fun String.doubleQuoted() : String =
-    this.surroundWith("\"")
+    this.wrapIfMissing("\"", bothOrNone=true)
 
 fun String.singleQuoted() : String =
-    this.surroundWith("'")
+    this.wrapIfMissing("'", bothOrNone=true)
 
 /**
  * Removes surrounding pairs of matching quote characters from the String. If the String is not quoted, returns the
@@ -110,17 +163,12 @@ fun String.dequoted() : String {
     if (!this.isQuoted())
         return this
 
-    var s = this
-
-    if (s.isSingleQuoted()) {
-        s = s.removePrefix("'")
-        s = s.removeSuffix("'")
-    } else if (s.isDoubleQuoted()) {
-        s = s.removePrefix("\"")
-        s = s.removeSuffix("\"")
-    }
-
-    return s
+    return if (this.isSingleQuoted())
+        this.unwrap('\'')
+    else if (this.isDoubleQuoted())
+        this.unwrap('\"')
+    else
+        this
 }
 
 // TODO Whole number percentages, decimal percentages
@@ -248,6 +296,22 @@ fun MutableList<String>.replaceMap(replacements: Map<String, String>) : MutableL
         this[i] = replaced
     }
     return this
+}
+
+fun String.truncate(
+    maxWidth: Int,
+    trimBefore: Boolean = false,
+    postfix: String = "...",
+) : String {
+    var str = this
+    if (trimBefore)
+        str = str.trim()
+    val shouldTruncate = str.length > maxWidth
+    if (shouldTruncate)
+        str = str.substring(0, maxWidth)
+    if (postfix.isNotEmpty() && shouldTruncate)
+        str += postfix
+    return str
 }
 
 /* MARK: ChatColor Related */

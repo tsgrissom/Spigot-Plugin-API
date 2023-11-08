@@ -88,7 +88,7 @@ class StringExtensionsTest : PAPIPluginTest() {
     fun resolveChatColor_shouldBeNullWhenValuesAreInvalidQualifiedColorCodes(value: String) =
         assertNull(value.resolveChatColor())
 
-    @DisplayName("Does String#startsAndEndsWithSameChar(ignoreCase) when passed mixed-capitalization leading and trailing character palindromes always equal true?")
+    @DisplayName("Does String#isWrappedWithSameChar(ignoreCase) equal true when passed mixed-capitalization leading and trailing character palindromes always equal true?")
     @ParameterizedTest
     @ValueSource(strings=[
         "civiC",
@@ -96,7 +96,7 @@ class StringExtensionsTest : PAPIPluginTest() {
         "leveL"
     ])
     fun startsAndEndsWithSameCharIgnoreCase_shouldBeTrueWhenValuesAreMixedUppercasedLeadingTrailingCharPalindromes(value: String) =
-        assertTrue(value.startsAndEndsWithSameChar(ignoreCase=true))
+        assertTrue(value.isWrappedWithSameChar(ignoreCase=true))
 
     @DisplayName("Does String#equalsAny equal false when all arguments are similar Strings with different uppercasing?")
     @ParameterizedTest
@@ -143,6 +143,26 @@ class StringExtensionsTest : PAPIPluginTest() {
     fun capitalizeEachWordAllCaps_shouldNeqOriginalStr(value: String) =
         assertNotEquals(value.capitalizeEachWordAllCaps(), value)
 
+    // MARK: Miscellaneous Mutation Tests
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "Text  ",
+        "Another     "
+    ])
+    fun truncate_shouldNotEndWithEllipsesWhenLessThanMaxWidthAfterTrim(value: String) =
+        assertFalse(value.truncate(12, trimBefore=true, postfix="...").endsWith("..."))
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "Some long text with trailing whitespace",
+        "Something with extended test foobar",
+    ])
+    fun truncate_shouldEndWithEllipsesWhenGreaterThanMaxWidth(value: String) {
+        val truncated = value.truncate(12)
+        assertTrue(truncated.endsWith("..."), "\"$truncated\" does not end with ...®")
+    }
+
     // MARK: Percentage Tests
 
     @DisplayName("Does a non-percentage String value fail to match the percentage regular expression?")
@@ -166,6 +186,58 @@ class StringExtensionsTest : PAPIPluginTest() {
         assertTrue(value.isPercentage())
 
     // MARK: Prefixes/Suffix Tests
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "Foobar",
+        "Hello world",
+        "This is some text that will be wrapped"
+    ])
+    fun wrap_shouldStartAndEndWithToken(value: String) {
+        val token = "\""
+        val newValue = value.wrap(token)
+        assertTrue(newValue.startsWith(token) && newValue.endsWith(token))
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "\"Some text that is already quoted\"",
+        "\"This text is already surrounded w/ quotes\"",
+        "\"Text within quotes should not be double-quoted\""
+    ])
+    fun wrapIfMissing_shouldEqOriginalValueWhenAlreadyWrappedWithChar(value: String) {
+        val char = '\"'
+        val newValue = value.wrapIfMissing(char)
+        assertEquals(newValue, value)
+    }
+
+    // TODO Test bothOrNone parameter of String#wrapIfMissing
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "dText wrapped in lowercase D charsd",
+        "dSome more text wrapped in lowercase Dd",
+        "dFoobard"
+    ])
+    fun unwrap_shouldNotStartOrEndWithUnwrappedChar(value: String) {
+        val char = 'd'
+        val newValue = value.unwrap(char)
+        assertFalse(newValue.startsWith(char))
+        assertFalse(newValue.endsWith(char))
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "'Text within apostrophes'",
+        "'Some more text within apostrophes'",
+        "'Yet another text within apostrophes'"
+    ])
+    fun unwrap_shouldNotStartOrEndWithUnwrappedToken(value: String) {
+        val token = "'"
+        val newValue = value.unwrap(token)
+        assertFalse(newValue.startsWith(token))
+        assertFalse(newValue.endsWith(token))
+    }
 
     @DisplayName("Does String#removePrefixes not equal original String when receivers all contain the prefixes?")
     @ParameterizedTest
