@@ -9,28 +9,28 @@ import org.junit.jupiter.api.assertThrows
 class ValidCommandFlagTest : PAPIPluginTest() {
 
     @Test
-    fun doesSingleCharCommandFlagThrowException() {
+    fun constructor_shouldThrowIllegalArgumentExceptionWhenQualifiedNameIsSingleCharacter() {
         assertThrows<IllegalArgumentException>(
             "Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not"
         ) { ValidCommandFlag("g") }
     }
 
     @Test
-    fun doesCommandFlagWithLeadingHyphenCharThrowException() {
+    fun constructor_shouldThrowIllegalArgumentExceptionWhenQualifiedNameHasHyphenatedPrefix() {
         assertThrows<IllegalArgumentException>(
             "Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not"
         ) { ValidCommandFlag("-invalidflag") }
     }
 
     @Test
-    fun doesCommandFlagConsistingOfWhitespaceThrowException() {
+    fun constructor_shouldThrowIllegalArgumentExceptionWhenQualifiedNameConsistsOfWhitespace() {
         assertThrows<IllegalArgumentException>(
             "Expected construction of ValidCommandFlag to throw IllegalArgumentException but it did not"
         ) { ValidCommandFlag("   ") }
     }
 
     @Test
-    fun doesCapitalizedCommandFlagShortNameEqCapitalLetter() {
+    fun isShortNameUppercased_shouldEqualCapitalizedQualifiedName() {
         val flag = ValidCommandFlag("Target")
         assertEquals(flag.isShortNameUppercased(), flag.getShortName().startsWith("T"))
     }

@@ -10,22 +10,22 @@ import org.junit.jupiter.api.Test
 class CommandFlagParserTest : PAPIPluginTest() {
 
     @Test
-    fun doesContextWithGuiFlagPassedHaveEmptyUnknownFlags() {
+    fun getUnknownFlags_shouldBeEmptyWhenContextSpecifiesValidFlagsForParser() =
         arrayOf(
             mockCommandContext("--gui"),
             mockCommandContext("-g")
         ).forEach { context ->
-            assertEmpty(CommandFlagParser(context.args, FLAG_GRAPHICAL).getUnknownFlags())
+            val parser = CommandFlagParser(context.args, FLAG_GRAPHICAL)
+            assertEmpty(parser.getUnknownFlags())
         }
-    }
 
     @Test
-    fun doesContextWithUnknownFlagPassedHaveNonEmptyUnknownFlags() {
+    fun getUnknownFlags_shouldBeNonEmptyWhenContextSpecifiesUnknownFlagsForParser() =
         arrayOf(
             mockCommandContext("-G", "--gui"),
             mockCommandContext("--foo")
         ).forEach { context ->
-            assertNotEmpty(CommandFlagParser(context.args, FLAG_GRAPHICAL).getUnknownFlags())
+            val parser = CommandFlagParser(context.args, FLAG_GRAPHICAL)
+            assertNotEmpty(parser.getUnknownFlags())
         }
-    }
 }
