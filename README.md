@@ -29,6 +29,10 @@ identify command flags passed within the current context, unknown flags, and mor
 `ValidCommandFlag` simply enumerates what is considered a valid flag for a command. Construct and pass to your
 `CommandFlagParser` to determine if your valid flags were passed by the user at command-time.
 
+#### Sub-Package `help`
+
+Contains 
+
 ## Package `pluginapi.conversation`
 
 An experimental package to interface with the Bukkit Conversation API. Mostly unused at the moment.
