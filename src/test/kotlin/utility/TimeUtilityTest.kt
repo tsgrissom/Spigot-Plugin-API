@@ -1,15 +1,15 @@
 package utility
 
 import PAPIPluginTest
-import io.github.tsgrissom.pluginapi.utility.TimeUtility
+import io.github.tsgrissom.pluginapi.extension.kt.isInputInHours
+import io.github.tsgrissom.pluginapi.extension.kt.isInputInMinutes
+import io.github.tsgrissom.pluginapi.extension.kt.isInputInSeconds
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 class TimeUtilityTest : PAPIPluginTest() {
-
-    private val util = TimeUtility()
 
     @DisplayName("Does an assortment of valid Strings expressing time in seconds passed to TimeUtility#isInputInSeconds evaluate to true?")
     @ParameterizedTest
@@ -19,7 +19,7 @@ class TimeUtilityTest : PAPIPluginTest() {
         "1S"
     ])
     fun isInputInSeconds_shouldBeTrueWhenValuesAreValidExpressionsOfTimeInSecondsAsStrings(value: String) =
-        assertTrue(util.isInputInSeconds(value), "$value is not valid input as seconds")
+        assertTrue(value.isInputInSeconds(), "$value is not valid input as seconds")
 
     @DisplayName("Does an assortment of valid Strings expressing time in minutes passed to TimeUtility#isInputInMinutes evaluate to true?")
     @ParameterizedTest
@@ -29,7 +29,7 @@ class TimeUtilityTest : PAPIPluginTest() {
         "10000m"
     ])
     fun isInputInMinutes_shouldBeTrueWhenValuesAreValidExpressionsOfTimeInMinutesAsStrings(value: String) =
-        assertTrue(util.isInputInMinutes(value), "$value is not valid input as minutes")
+        assertTrue(value.isInputInMinutes(), "$value is not valid input as minutes")
 
     @DisplayName("Does an assortment of valid Strings expressing time in hours passed to TimeUtility#isInputInHours evaluate to true?")
     @ParameterizedTest
@@ -39,7 +39,7 @@ class TimeUtilityTest : PAPIPluginTest() {
         "10000h"
     ])
     fun isInputInHours_shouldBeTrueWhenValuesAreValidExpressionsOfTimeInHoursAsStrings(value: String) =
-        assertTrue(util.isInputInHours(value), "$value is not valid input as hours")
+        assertTrue(value.isInputInHours(), "$value is not valid input as hours")
 
     // TODO More tests for 12h and 24h methods
 }
