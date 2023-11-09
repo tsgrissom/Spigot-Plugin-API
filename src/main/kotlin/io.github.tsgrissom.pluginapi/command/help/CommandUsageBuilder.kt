@@ -14,8 +14,8 @@ class CommandUsageBuilder(
 ) {
     private val parameters = mutableListOf<SubcParameterBuilder>()
     private val consoleParameters = mutableListOf<SubcParameterBuilder>()
-    private var colorPrimary: BungeeChatColor = RED
-    private var colorDetail: BungeeChatColor = DARK_RED
+    private var colorPrimary: BungeeChatColor = DARK_RED
+    private var colorDetail: BungeeChatColor = RED
 
     companion object {
         fun start(context: CommandContext) =
@@ -28,15 +28,25 @@ class CommandUsageBuilder(
         return this
     }
 
-    fun withParameter(arg: SubcParameterBuilder) : CommandUsageBuilder {
-        arg.colors(colorDetail, colorDetail)
-        parameters.add(arg)
+    fun withParameter(parameter: SubcParameterBuilder) : CommandUsageBuilder {
+        parameter.colors(colorDetail, colorDetail)
+        parameters.add(parameter)
+        return this
+    }
+
+    fun withParameters(vararg parameters: SubcParameterBuilder) : CommandUsageBuilder {
+        parameters.forEach { this.withParameter(it) }
         return this
     }
 
     fun withConsoleParameter(arg: SubcParameterBuilder) : CommandUsageBuilder {
         arg.colors(colorDetail, colorDetail)
         consoleParameters.add(arg)
+        return this
+    }
+
+    fun withConsoleParameters(vararg parameters: SubcParameterBuilder) : CommandUsageBuilder {
+        parameters.forEach { this.withConsoleParameter(it) }
         return this
     }
 
