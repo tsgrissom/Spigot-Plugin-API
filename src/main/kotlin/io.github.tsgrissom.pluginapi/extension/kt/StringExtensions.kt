@@ -236,6 +236,10 @@ fun String.removeSuffixes(
     return s
 }
 
+/**
+ * Checks if the first character of the String is uppercased.
+ * @return Whether the String is capitalized.
+ */
 fun String.isCapitalized() : Boolean {
     if (this.trim().isEmpty())
         return false
@@ -323,6 +327,13 @@ fun MutableList<String>.replaceMap(replacements: Map<String, String>) : MutableL
     return this
 }
 
+/**
+ * Truncates a String to the max width if its length is greater than that number. If it is truncated, the postfix will
+ * be appended to the end of the result.
+ * @param maxWidth The maximum width of the String in characters.
+ * @param trimBefore Whether the String should be trimmed before checking if it exceeds the max width.
+ * @param postfix The String to append to the result if truncation is necessary. Set to empty String to have none.
+ */
 fun String.truncate(
     maxWidth: Int,
     trimBefore: Boolean = false,
