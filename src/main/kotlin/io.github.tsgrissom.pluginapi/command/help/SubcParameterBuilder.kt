@@ -1,5 +1,6 @@
 package io.github.tsgrissom.pluginapi.command.help
 
+import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.bukkit.appendc
 import io.github.tsgrissom.pluginapi.extension.kt.translateColor
 import net.md_5.bungee.api.ChatColor
@@ -16,10 +17,18 @@ class SubcParameterBuilder(
 
     private var hoverText: MutableList<String> = mutableListOf()
     private var underlined = false
+    private var colorPunctuation = BungeeChatColor.DARK_GRAY
+    private var colorValue = BungeeChatColor.YELLOW
 
     companion object {
         fun start(name: String) =
             SubcParameterBuilder(name)
+    }
+
+    fun colors(punctuation: BungeeChatColor, value: BungeeChatColor) : SubcParameterBuilder {
+        this.colorPunctuation = punctuation
+        this.colorValue = value
+        return this
     }
 
     fun required(b: Boolean) : SubcParameterBuilder {
@@ -65,17 +74,17 @@ class SubcParameterBuilder(
         }
 
         val nameComp = TextComponent(name)
+        nameComp.color = colorValue
 
         if (onHover.isNotEmpty()) {
             nameComp.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, onHover.toList())
-            nameComp.color = ChatColor.YELLOW
             nameComp.isUnderlined = true
         }
 
         val comp = ComponentBuilder()
-            .appendc(if (required) "<" else "[", ChatColor.DARK_GRAY)
+            .appendc(if (required) "<" else "[", colorPunctuation)
             .append(nameComp)
-            .appendc(if (required) ">" else "]", ChatColor.DARK_GRAY)
+            .appendc(if (required) ">" else "]", colorPunctuation)
             .underlined(false)
 
         return comp.create()
