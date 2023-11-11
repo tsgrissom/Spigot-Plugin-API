@@ -61,10 +61,10 @@ class SubcParameterBuilder(
         val requiredLine = ComponentBuilder()
             .appendc("Required: ", ChatColor.GRAY)
             .appendc(if (required) "Yes" else "No", if (required) ChatColor.GREEN else ChatColor.RED)
-            .append("\n")
-            .create()
+        if (hoverText.isNotEmpty())
+            requiredLine.append("\n")
 
-        onHover.add(Text(requiredLine))
+        onHover.add(Text(requiredLine.create()))
 
         if (hoverText.isNotEmpty()) {
             for ((i, str) in hoverText.withIndex()) {

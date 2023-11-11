@@ -90,7 +90,7 @@ class CommandUsageBuilder(
         for ((i, arg) in contextualArguments.withIndex()) {
             root.addExtra(TextComponent(*arg.toComponents()))
 
-            if (i != (consoleParameters.size - 1))
+            if (i != (contextualArguments.size - 1))
                 root.addExtra(" ")
         }
 
