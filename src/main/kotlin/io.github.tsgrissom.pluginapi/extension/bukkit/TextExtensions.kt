@@ -5,7 +5,9 @@ import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.kt.equalsIc
 import io.github.tsgrissom.pluginapi.func.NonFormattingChatColorPredicate
 import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
+import net.md_5.bungee.api.chat.hover.content.Text
 import org.bukkit.Bukkit
 import org.bukkit.Material
 
@@ -126,3 +128,19 @@ fun ComponentBuilder.appendc(str: String, color: BungeeChatColor) : ComponentBui
  */
 fun ComponentBuilder.appendc(text: TextComponent, color: BungeeChatColor) : ComponentBuilder =
     this.append(text).color(color)
+
+fun Array<String>.toHoverTextList() : List<Text> {
+    val new = mutableListOf<Text>()
+
+    for ((i, str) in this.withIndex()) {
+        var mutated = str
+        if (i != (this.size - 1))
+            mutated += "\n"
+        new.add(Text(mutated))
+    }
+
+    return new
+}
+
+fun Array<String>.toShowTextHoverEvent() : HoverEvent =
+    HoverEvent(HoverEvent.Action.SHOW_TEXT, this.toHoverTextList())
