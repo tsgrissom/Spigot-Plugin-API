@@ -37,3 +37,12 @@ fun CommandSender.getCurrentWorldOrDefault() : World {
         w = this.world
     return w
 }
+
+fun CommandSender.msg(vararg text: String) {
+    for (line in text) {
+        var s = line
+        if (line.contains('&'))
+            s = line.translateColor()
+        this.sendMessage(s)
+    }
+}
