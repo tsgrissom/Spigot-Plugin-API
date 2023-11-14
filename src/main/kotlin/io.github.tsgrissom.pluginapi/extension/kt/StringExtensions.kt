@@ -217,7 +217,6 @@ fun String.isPercentage() : Boolean =
 
 /* MARK: String Mutations */
 
-// TODO Write test
 fun String.removePrefixes(vararg prefixes: String, once: Boolean = false, ignoreCase: Boolean = false) : String {
     var s = this
     for (pre in prefixes) {
@@ -230,7 +229,6 @@ fun String.removePrefixes(vararg prefixes: String, once: Boolean = false, ignore
     return s
 }
 
-// TODO Write test
 fun String.removeSuffixes(
     vararg suffixes: String,
     once: Boolean = false,

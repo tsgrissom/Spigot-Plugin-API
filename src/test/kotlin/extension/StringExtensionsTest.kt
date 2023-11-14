@@ -193,6 +193,38 @@ class StringExtensionsTest : PAPIPluginTest() {
 
     // MARK: Prefixes/Suffix Tests
 
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "\'Hello world!",
+        "\"Hello world!",
+        "dHello world!"
+    ])
+    fun removePrefixes_notOnce_shouldEqualOriginalStringWithVariousPrependedStrings(value: String) {
+        val prefixes = arrayOf(
+            "\'",
+            "\"",
+            "d"
+        )
+
+        assertNotEquals(value.removePrefixes(prefixes=prefixes, once=false), value)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings=[
+        "Hello world!\'",
+        "Hello world!\"",
+        "Hello world!d"
+    ])
+    fun removeSuffixes_notOnce_shouldEqualOriginalStringWithVariousAppendedStrings(value: String) {
+        val suffixes = arrayOf(
+            "\'",
+            "\"",
+            "d"
+        )
+
+        assertNotEquals(value.removeSuffixes(suffixes=suffixes, once=false), value)
+    }
+
     @DisplayName("Does String#wrap start and end with the wrapping token?")
     @ParameterizedTest
     @ValueSource(strings=[
