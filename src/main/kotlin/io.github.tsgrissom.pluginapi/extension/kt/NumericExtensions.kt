@@ -11,6 +11,20 @@ import org.bukkit.ChatColor
 fun Double.roundToDigits(n: Int) : Double =
     String.format("%.${n}f", this).toDouble()
 
+fun Int.calculateIndexOfNextPage(maxPage: Int) : Int {
+    return if ((maxPage - 1) > this)
+        this + 1
+    else
+        0
+}
+
+fun Int.calculateIndexOfPreviousPage(maxPage: Int) : Int {
+    return if (this > 0)
+        this - 1
+    else
+        maxPage - 1
+}
+
 fun Long.convertTicksTo24Hour(withColor: Boolean = false) : String {
     val ticksPerDay = 24000
     val ticksPerHour = ticksPerDay / 24
