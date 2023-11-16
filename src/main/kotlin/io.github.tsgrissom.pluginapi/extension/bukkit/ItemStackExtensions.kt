@@ -33,10 +33,18 @@ class ItemStackDisplayNameBuilder {
 class ItemStackLoreBuilder {
     var withAltColor = true
     var prepend = ""
+    var prependColor: ChatColor? = null
     private val contents = mutableListOf<String>()
 
-    fun line(str: String) {
-        contents.add("$prepend$str")
+    operator fun String.unaryPlus() {
+        var pre = ""
+
+        pre = if (prepend.isEmpty() && prependColor != null) // This is type-safe + gives way to prepend a ChatColor
+            prependColor.toString()
+        else
+            prepend
+
+        contents.add("$pre$this")
     }
 
     fun build() : List<String> {
@@ -50,9 +58,10 @@ class ItemStackLoreBuilder {
 class ItemFlagSetBuilder {
     private val flags = mutableSetOf<ItemFlag>()
 
-    fun flag(f: ItemFlag) {
-        flags.add(f)
-    }
+    operator fun ItemFlag.unaryMinus() =
+        flags.remove(this)
+    operator fun ItemFlag.unaryPlus() =
+        flags.add(this)
 
     fun build() : Set<ItemFlag> =
         this.flags
@@ -77,6 +86,10 @@ class ItemStackBuilder {
         if (nameBuilder.isComplete()) {
             this.name = nameBuilder.build()
         }
+    }
+
+    fun name(prependedColor: ChatColor, displayName: String) {
+        this.name = "$prependedColor$displayName"
     }
 
     fun lore(block: ItemStackLoreBuilder.()-> Unit) {
@@ -120,8 +133,15 @@ class ItemStackBuilder {
     }
 }
 
-fun buildItem(block: ItemStackBuilder.()-> Unit) : ItemStack {
+fun itemStack(block: ItemStackBuilder.()-> Unit) : ItemStack {
     val itemStackBuilder = ItemStackBuilder()
+    itemStackBuilder.block()
+    return itemStackBuilder.build()
+}
+
+fun itemStack(type: Material, block: ItemStackBuilder.()-> Unit) : ItemStack {
+    val itemStackBuilder = ItemStackBuilder()
+    itemStackBuilder.type = type
     itemStackBuilder.block()
     return itemStackBuilder.build()
 }
