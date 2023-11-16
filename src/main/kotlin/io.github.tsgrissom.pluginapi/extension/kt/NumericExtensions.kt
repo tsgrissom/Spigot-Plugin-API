@@ -1,6 +1,6 @@
 package io.github.tsgrissom.pluginapi.extension.kt
 
-import org.bukkit.ChatColor
+import BukkitChatColor
 
 // TODO Write tests
 /**
@@ -25,7 +25,14 @@ fun Int.calculateIndexOfPreviousPage(maxPage: Int) : Int {
         maxPage - 1
 }
 
-fun Long.convertTicksTo24Hour(withColor: Boolean = false) : String {
+fun Long.convertTicksTo24Hour(
+    withColor: Boolean = true,
+    colorValue: BukkitChatColor = BukkitChatColor.RED,
+    colorSecondary: BukkitChatColor = BukkitChatColor.DARK_GRAY
+) : String {
+    if (this < 0 || this > 24000)
+        throw IllegalArgumentException("\"$this\" is out of Range[0->24000]. Cannot convert ticks to 24 hour clock.")
+
     val ticksPerDay = 24000
     val ticksPerHour = ticksPerDay / 24
 
@@ -34,7 +41,10 @@ fun Long.convertTicksTo24Hour(withColor: Boolean = false) : String {
     val minutes = ((this % ticksPerDay) % ticksPerHour) * 60 / ticksPerHour
 
     // Format the time as "HH:mm"
-    val valueColor = if (withColor) ChatColor.RED else ""
-    val accentColor = if (withColor) ChatColor.DARK_GRAY else ""
-    return String.format("${valueColor}%02d${accentColor}:${valueColor}%02d", hours, minutes)
+    val ccVal = if (withColor) colorValue else ""
+    val ccSec = if (withColor) colorSecondary else ""
+    return String.format(
+        "%s%02d%s:%s%02d",
+        ccVal, hours, ccSec, ccVal, minutes
+    )
 }
