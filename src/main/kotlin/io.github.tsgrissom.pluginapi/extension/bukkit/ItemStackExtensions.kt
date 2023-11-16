@@ -3,6 +3,7 @@
 package io.github.tsgrissom.pluginapi.extension.bukkit
 
 import io.github.tsgrissom.pluginapi.extension.kt.translateColor
+import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.OfflinePlayer
@@ -15,6 +16,115 @@ import org.bukkit.material.MaterialData
 import org.bukkit.profile.PlayerProfile
 import java.util.*
 import java.util.function.Consumer
+
+// MARK: ItemStack DSL
+
+class ItemStackDisplayNameBuilder {
+    var color: ChatColor? = null
+    var text: String = ""
+
+    fun isComplete() =
+        color != null && text.isNotEmpty()
+
+    fun build() : String =
+        "${color.toString()}$text"
+}
+
+class ItemStackLoreBuilder {
+    var withAltColor = true
+    var prepend = ""
+    private val contents = mutableListOf<String>()
+
+    fun line(str: String) {
+        contents.add("$prepend$str")
+    }
+
+    fun build() : List<String> {
+        return if (!withAltColor)
+            contents
+        else
+            contents.map { it.translateColor() }.toList()
+    }
+}
+
+class ItemFlagSetBuilder {
+    private val flags = mutableSetOf<ItemFlag>()
+
+    fun flag(f: ItemFlag) {
+        flags.add(f)
+    }
+
+    fun build() : Set<ItemFlag> =
+        this.flags
+}
+
+class ItemStackBuilder {
+    // Public properties
+    var amount: Int = 1
+    var customModel: Int = -1
+    var type: Material = Material.DIRT
+    // Public & lambda access
+    var name: String = ""
+    // Private- accessed via lambda methods
+    private var lore: List<String> = listOf()
+    private var itemFlags: Set<ItemFlag> = setOf()
+    // TODO Enchantments
+    // addEnchant(type, level, safe?)
+
+    fun name(block: ItemStackDisplayNameBuilder.()-> Unit) {
+        val nameBuilder = ItemStackDisplayNameBuilder()
+        nameBuilder.block()
+        if (nameBuilder.isComplete()) {
+            this.name = nameBuilder.build()
+        }
+    }
+
+    fun lore(block: ItemStackLoreBuilder.()-> Unit) {
+        val loreBuilder = ItemStackLoreBuilder()
+        loreBuilder.block()
+        this.lore = loreBuilder.build()
+    }
+
+    fun flags(block: ItemFlagSetBuilder.()-> Unit) {
+        val itemFlagBuilder = ItemFlagSetBuilder()
+        itemFlagBuilder.block()
+        this.itemFlags = itemFlagBuilder.build()
+    }
+
+    fun hasCustomModelData() =
+        customModel != -1
+
+    fun build() : ItemStack {
+        val item = ItemStack(type, amount)
+
+        if (name.isNotEmpty() ||
+            lore.isNotEmpty() ||
+            itemFlags.isNotEmpty() ||
+            hasCustomModelData()
+        ) { // Any condition which requires ItemMeta
+
+            val meta = item.itemMeta
+            if (name.isNotEmpty())
+                meta!!.setDisplayName(name.translateColor())
+            if (lore.isNotEmpty())
+                meta!!.lore = this.lore
+            if (itemFlags.isNotEmpty())
+                meta!!.addItemFlags(*itemFlags.toTypedArray())
+            if (hasCustomModelData())
+                meta!!.setCustomModelData(customModel)
+            item.itemMeta = meta
+
+        }
+
+        return item
+    }
+}
+
+fun buildItem(block: ItemStackBuilder.()-> Unit) : ItemStack {
+    val itemStackBuilder = ItemStackBuilder()
+    itemStackBuilder.block()
+    return itemStackBuilder.build()
+}
 
 // MARK: ItemStack Builder Functions
 

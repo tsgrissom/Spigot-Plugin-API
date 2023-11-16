@@ -20,7 +20,8 @@ class NumericExtensionsTest : PAPIPluginTest() {
         val resultOfNext = value.calculateIndexOfNextPage(maxPageIndex)
         assertTrue(
             resultOfNext <= maxPageIndex,
-            "\"$value\"->calculateNextPageIndex(max=$maxPageIndex) \"$resultOfNext\" is greater than max page index (=$maxPageIndex)")
+            "\"$value\"->calculateNextPageIndex(max=$maxPageIndex) \"$resultOfNext\" is greater than max page index (=$maxPageIndex)"
+        )
     }
 
     @ParameterizedTest
