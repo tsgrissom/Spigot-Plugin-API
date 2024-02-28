@@ -1,8 +1,8 @@
-package func
+package functional
 
 import BukkitChatColor
 import PAPIPluginTest
-import io.github.tsgrissom.pluginapi.func.NonFormattingChatColorPredicate
+import io.github.tsgrissom.pluginapi.functional.NonFormattingChatColorPredicate
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 

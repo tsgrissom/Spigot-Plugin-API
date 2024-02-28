@@ -3,7 +3,7 @@ package io.github.tsgrissom.pluginapi.extension.bukkit
 import BukkitChatColor
 import BungeeChatColor
 import io.github.tsgrissom.pluginapi.extension.kt.equalsIc
-import io.github.tsgrissom.pluginapi.func.NonFormattingChatColorPredicate
+import io.github.tsgrissom.pluginapi.functional.NonFormattingChatColorPredicate
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
@@ -83,20 +83,20 @@ fun BukkitChatColor.getRepresentativeMaterial() : Material {
     val def = Material.GLASS
     val name = this.name
     val special = mapOf(
-        BukkitChatColor.GREEN to Material.LIME_WOOL,
+        BukkitChatColor.DARK_RED to Material.REDSTONE_BLOCK,
+        BukkitChatColor.RED to Material.RED_WOOL,
+        BukkitChatColor.GOLD to Material.YELLOW_WOOL,
+        BukkitChatColor.YELLOW to Material.GOLD_BLOCK,
         BukkitChatColor.DARK_GREEN to Material.GREEN_WOOL,
+        BukkitChatColor.GREEN to Material.LIME_WOOL,
         BukkitChatColor.AQUA to Material.LIGHT_BLUE_WOOL,
         BukkitChatColor.DARK_AQUA to Material.CYAN_WOOL,
         BukkitChatColor.BLUE to Material.BLUE_CONCRETE_POWDER,
         BukkitChatColor.DARK_BLUE to Material.BLUE_WOOL,
-        BukkitChatColor.RED to Material.RED_WOOL,
-        BukkitChatColor.DARK_RED to Material.REDSTONE_BLOCK,
-        BukkitChatColor.GRAY to Material.LIGHT_GRAY_WOOL,
-        BukkitChatColor.DARK_GRAY to Material.GRAY_WOOL,
-        BukkitChatColor.GOLD to Material.YELLOW_WOOL,
-        BukkitChatColor.YELLOW to Material.GOLD_BLOCK,
         BukkitChatColor.LIGHT_PURPLE to Material.PURPLE_WOOL,
-        BukkitChatColor.DARK_PURPLE to Material.PURPLE_CONCRETE
+        BukkitChatColor.DARK_PURPLE to Material.PURPLE_CONCRETE,
+        BukkitChatColor.GRAY to Material.LIGHT_GRAY_WOOL,
+        BukkitChatColor.DARK_GRAY to Material.GRAY_WOOL
     )
 
     if (special.contains(this))

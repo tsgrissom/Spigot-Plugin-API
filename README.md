@@ -51,7 +51,7 @@ Contains many extension functions for both Kotlin and the Bukkit API.
 
 #### Sub-Package `kt`
 
-## Package `pluginapi.func`
+## Package `pluginapi.functional`
 
 Contains custom classes for use with the functional programming paradigm of Kotlin/JVM.
 

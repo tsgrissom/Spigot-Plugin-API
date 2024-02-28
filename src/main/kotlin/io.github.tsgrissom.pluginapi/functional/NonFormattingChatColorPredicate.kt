@@ -1,4 +1,4 @@
-package io.github.tsgrissom.pluginapi.func
+package io.github.tsgrissom.pluginapi.functional
 
 import org.bukkit.ChatColor
 import java.util.function.Predicate

@@ -1,7 +1,7 @@
 package io.github.tsgrissom.pluginapi.extension.kt
 
 import io.github.tsgrissom.pluginapi.extension.bukkit.getValidInputAliases
-import io.github.tsgrissom.pluginapi.func.NonFormattingChatColorPredicate
+import io.github.tsgrissom.pluginapi.functional.NonFormattingChatColorPredicate
 import org.bukkit.ChatColor
 
 // 12hr time without a space between the time->AM/PM
@@ -245,6 +245,8 @@ fun String.removeSuffixes(
     return s
 }
 
+// TODO Remove affixes (both pre/post)
+
 /**
  * Checks if the first character of the String is uppercased.
  * @return Whether the String is capitalized.
@@ -273,6 +275,8 @@ fun String.capitalize() : String {
     str += (this.substring(1, this.length)).lowercase()
     return str
 }
+
+// TODO Can be capitalized check
 
 /**
  * Capitalizes the String where it is expected to already be in all capital letters.
