@@ -48,3 +48,49 @@ fun Long.convertTicksTo24Hour(
         ccVal, hours, ccSec, ccVal, minutes
     )
 }
+
+/*
+ * less than 2s - a moment ago
+ * less than 5s - moments ago
+ * between 5s-59s - x seconds ago
+ */
+fun Long.toTimeAgoFormat() : String {
+    val aSecond = 1000L
+    val aMinute = aSecond * 60
+    val anHour  = aMinute * 60
+    val aDay    = anHour  * 24
+    val aMonth  = aDay    * 30
+    val aYear   = aMonth  * 12
+
+    val difference = System.currentTimeMillis() - this
+
+    if (difference <= (aSecond * 2)) {
+        return "a moment ago"
+    } else if (difference <= (aSecond * 5)) {
+        return "a few moments ago"
+    } else if (difference <= (aSecond * 59)) {
+        val fmt = (difference / 1000).toInt()
+        val noun = if (fmt == 1) "second" else "seconds"
+        return "$fmt $noun ago"
+    } else if (difference < anHour) {
+        val fmt = (difference / 1000 / 60).toInt()
+        val noun = if (fmt == 1) "minute" else "minutes"
+        return "$fmt $noun ago"
+    } else if (difference < aDay) {
+        val fmt = (difference / 1000 / 60 / 60).toInt()
+        val noun = if (fmt == 1) "hour" else "hours"
+        return "$fmt $noun ago"
+    } else if (difference < aMonth) {
+        val fmt = (difference / 1000 / 60 / 60 / 24).toInt()
+        val noun = if (fmt == 1) "day" else "days"
+        return "$fmt $noun ago"
+    } else if (difference < aYear) {
+        val fmt = (difference / 1000 / 60 / 60 / 24 / 30).toInt()
+        val noun = if (fmt == 1) "month" else "months"
+        return "$fmt $noun ago"
+    } else {
+        val fmt = (difference / 1000 / 60 / 60 / 24 / 30 / 12).toInt()
+        val noun = if (fmt == 1) "year" else "years"
+        return "$fmt $noun ago"
+    }
+}
