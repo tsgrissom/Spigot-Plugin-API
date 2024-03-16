@@ -3,6 +3,9 @@ package io.github.tsgrissom.pluginapi.parser
 import io.github.tsgrissom.pluginapi.extension.kt.isWrappedWith
 import io.github.tsgrissom.pluginapi.extension.kt.wrap
 
+val REGEX_SINGLE_QUOTED = Regex("'(.*?)'")
+val REGEX_DOUBLE_QUOTED = Regex("\"(.*?)\"")
+
 enum class QuotationType {
     DOUBLE, SINGLE, EITHER
 }
@@ -73,7 +76,7 @@ class QuotedStringParser(
 
     fun parse(input: String) : ParsedQuotedString {
         return when (searchMode) {
-            QuotedStringSearchMode.STRICT_FIRST_LAST -> parseStrictFirstLast(input)
+            QuotedStringSearchMode.STRICT_FIRST_LAST -> parseRegexFirstLast(input)
             QuotedStringSearchMode.ANY -> parseAny(input)
         }
     }
@@ -95,7 +98,7 @@ class QuotedStringParser(
      * @param input The String to search for a quoted String within.
      * @return A ParsedQuotedString object containing a nullable String and a ParsedQuotedStringResult value.
      */
-    private fun parseStrictFirstLast(input: String) : ParsedQuotedString {
+    private fun parseFastFirstLast(input: String) : ParsedQuotedString {
         if (searchQuotationType==QuotationType.EITHER) { // Either sign
             // Search for first sign then match to second
             var searchForSign = '"'
@@ -127,6 +130,28 @@ class QuotedStringParser(
         return ParsedQuotedString(ParsedQuotedStringResult.NO_QUOTATION_FOUND)
     }
 
+    private fun parseRegexFirstLast(input: String) : ParsedQuotedString {
+        val matchesDouble = REGEX_DOUBLE_QUOTED.matches(input)
+        val matchesSingle = REGEX_SINGLE_QUOTED.matches(input)
+
+        if (!matchesDouble && !matchesSingle) {
+            return ParsedQuotedString(ParsedQuotedStringResult.NO_QUOTATION_FOUND)
+        }
+
+        val seekingDouble = searchQuotationType==QuotationType.EITHER || searchQuotationType==QuotationType.DOUBLE
+        val seekingSingle = searchQuotationType==QuotationType.EITHER || searchQuotationType==QuotationType.SINGLE
+
+        if (seekingDouble && matchesDouble) {
+            val stripped = input.removeSurrounding("\"")
+            return ParsedQuotedString(value=wrapForOutputSettings(stripped))
+        } else if (seekingSingle && matchesSingle) {
+            val stripped = input.removeSurrounding("'")
+            return ParsedQuotedString(value=wrapForOutputSettings(stripped))
+        }
+
+        return ParsedQuotedString(ParsedQuotedStringResult.NO_QUOTATION_FOUND)
+    }
+
     /**
      * Parses a nullable quoted String as a ParsedQuotedString using any mode.
      * Any: The quoted String can begin and end at any point. The first quoted String will be taken.
@@ -134,9 +159,26 @@ class QuotedStringParser(
      * @return A ParsedQuotedString object containing a nullable String and a ParsedQuotedStringResult value.
      */
     private fun parseAny(input: String) : ParsedQuotedString {
-        // TODO
+        val doubleMatches = REGEX_DOUBLE_QUOTED.find(input)
+        val singleMatches = REGEX_SINGLE_QUOTED.find(input)
 
+        if (doubleMatches == null && singleMatches == null) {
+            return ParsedQuotedString(ParsedQuotedStringResult.NO_QUOTATION_FOUND)
+        }
+        // Something was matched
 
+        val seekingDouble = searchQuotationType==QuotationType.EITHER || searchQuotationType==QuotationType.DOUBLE
+        val seekingSingle = searchQuotationType==QuotationType.EITHER || searchQuotationType==QuotationType.SINGLE
+
+        if (seekingDouble && doubleMatches != null && doubleMatches.groupValues.isNotEmpty()) {
+            val found = doubleMatches.groupValues[0]
+            val stripped = found.removeSurrounding("\"")
+            return ParsedQuotedString(value=wrapForOutputSettings(stripped))
+        } else if (seekingSingle && singleMatches != null && singleMatches.groupValues.isNotEmpty()) {
+            val found = singleMatches.groupValues[0]
+            val stripped = found.removeSurrounding("'")
+            return ParsedQuotedString(value=wrapForOutputSettings(stripped))
+        }
 
         return ParsedQuotedString(ParsedQuotedStringResult.NO_QUOTATION_FOUND)
     }
