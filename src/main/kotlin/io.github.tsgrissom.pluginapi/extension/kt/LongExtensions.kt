@@ -2,29 +2,6 @@ package io.github.tsgrissom.pluginapi.extension.kt
 
 import BukkitChatColor
 
-// TODO Write tests
-/**
- * Formats the Double to have the requisite number of fractional digits trailing the decimal separator.
- * @param n The number of fractional digits allowed to trail the decimal separator.
- * @return A new Double containing the requisite number of fractional digits trailing the decimal separator.
- */
-fun Double.roundToDigits(n: Int) : Double =
-    String.format("%.${n}f", this).toDouble()
-
-fun Int.calculateIndexOfNextPage(maxPage: Int) : Int {
-    return if ((maxPage - 1) > this)
-        this + 1
-    else
-        0
-}
-
-fun Int.calculateIndexOfPreviousPage(maxPage: Int) : Int {
-    return if (this > 0)
-        this - 1
-    else
-        maxPage - 1
-}
-
 fun Long.convertTicksTo24Hour(
     withColor: Boolean = true,
     colorValue: BukkitChatColor = BukkitChatColor.RED,

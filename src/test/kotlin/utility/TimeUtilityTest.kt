@@ -19,7 +19,7 @@ class TimeUtilityTest : PAPIPluginTest() {
         "1S"
     ])
     fun isInputInSeconds_shouldBeTrueWhenValuesAreValidExpressionsOfTimeInSecondsAsStrings(value: String) =
-        assertTrue(value.isInputInSeconds(), "$value is not valid input as seconds")
+        assertTrue(value.isInputInSeconds(), "String \"$value\" is not valid input as seconds")
 
     @DisplayName("Does an assortment of valid Strings expressing time in minutes passed to TimeUtility#isInputInMinutes evaluate to true?")
     @ParameterizedTest
@@ -29,7 +29,7 @@ class TimeUtilityTest : PAPIPluginTest() {
         "10000m"
     ])
     fun isInputInMinutes_shouldBeTrueWhenValuesAreValidExpressionsOfTimeInMinutesAsStrings(value: String) =
-        assertTrue(value.isInputInMinutes(), "$value is not valid input as minutes")
+        assertTrue(value.isInputInMinutes(), "String \"$value\" is not valid input as minutes")
 
     @DisplayName("Does an assortment of valid Strings expressing time in hours passed to TimeUtility#isInputInHours evaluate to true?")
     @ParameterizedTest
@@ -39,7 +39,7 @@ class TimeUtilityTest : PAPIPluginTest() {
         "10000h"
     ])
     fun isInputInHours_shouldBeTrueWhenValuesAreValidExpressionsOfTimeInHoursAsStrings(value: String) =
-        assertTrue(value.isInputInHours(), "$value is not valid input as hours")
+        assertTrue(value.isInputInHours(), "String \"$value\" is not valid input as hours")
 
     // TODO More tests for 12h and 24h methods
 }

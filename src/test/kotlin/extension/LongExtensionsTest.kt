@@ -1,48 +1,25 @@
 package extension
 
-import PAPIPluginTest
-import io.github.tsgrissom.pluginapi.extension.kt.*
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import io.github.tsgrissom.pluginapi.extension.kt.REGEX_24HR_CLOCK
+import io.github.tsgrissom.pluginapi.extension.kt.convertTicksTo24Hour
+import io.github.tsgrissom.pluginapi.extension.kt.toTimeAgoFormat
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-class NumericExtensionsTest : PAPIPluginTest() {
-
-    @ParameterizedTest
-    @ValueSource(ints=[0,1,2,3,4,5])
-    fun calculateNextPageIndex_max4_shouldNeverBeGreaterThan4(value: Int) {
-        val maxPageIndex = 4
-        val resultOfNext = value.calculateIndexOfNextPage(maxPageIndex)
-        assertTrue(
-            resultOfNext <= maxPageIndex,
-            "\"$value\"->calculateNextPageIndex(max=$maxPageIndex) \"$resultOfNext\" is greater than max page index (=$maxPageIndex)"
-        )
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints=[-2,-1,0,1,2,3])
-    fun calculatePreviousPageIndex_max4_shouldNeverBeLessThan0_and_shouldNeverBeGreaterThan4(value: Int) {
-        val maxPageIndex = 4
-        val resultOfPrevious = value.calculateIndexOfPreviousPage(maxPageIndex)
-        assertTrue(
-            resultOfPrevious >= 0,
-            "\"$value\"->calculatePreviousPageIndex(max=$maxPageIndex) \"$resultOfPrevious\" is less than 0"
-        )
-
-        assertTrue(
-            resultOfPrevious <= maxPageIndex,
-            "\"$value\"->calculateNextPageIndex(max=$maxPageIndex) \"$resultOfPrevious\" is greater than max page index (=$maxPageIndex)"
-        )
-    }
+class LongExtensionsTest {
 
     @ParameterizedTest
     @ValueSource(longs=[0,2000, 10000, 14444, 24000])
     fun convertTicksTo24Hour_withoutColor_shouldMatchRegex(value: Long) {
         val converted = value.convertTicksTo24Hour(withColor=false)
-        assertTrue(converted.matches(REGEX_24HR_CLOCK.toRegex()), "Result does not match regular expression StringExtensions#REGEX_24HR_CLOCK")
+        Assertions.assertTrue(
+            converted.matches(REGEX_24HR_CLOCK.toRegex()),
+            "Result does not match regular expression StringExtensions#REGEX_24HR_CLOCK"
+        )
     }
 
     @ParameterizedTest
@@ -55,18 +32,27 @@ class NumericExtensionsTest : PAPIPluginTest() {
         }
     }
 
+    @DisplayName("Does the difference between the current time in milliseconds and a random ")
     @RepeatedTest(100)
     fun toTimeAgoFormat_shouldEqualAMomentAgo_whenReceiverIsDifferenceBetweenNowAndBetweenAThousandthToTwoSeconds() {
         val randomMs = (1..2000).random()
         val difference = System.currentTimeMillis() - randomMs
-        assertEquals("a moment ago", difference.toTimeAgoFormat(), "String neq \"a moment ago\" \n(gen ms: $randomMs)")
+        Assertions.assertEquals(
+            "a moment ago",
+            difference.toTimeAgoFormat(),
+            "String neq \"a moment ago\" \n(gen ms: $randomMs)"
+        )
     }
 
     @RepeatedTest(100)
     fun toTimeAgoFormat_shouldEqualAFewMomentsAgo_whenReceiverIsDifferenceBetweenNowAndBetweenThreeToFiveSeconds() {
         val randomMs = (3000..5000).random()
         val difference = System.currentTimeMillis() - randomMs
-        assertEquals("a few moments ago", difference.toTimeAgoFormat(), "String neq \"a few moments ago\" \n(gen ms: $randomMs)")
+        Assertions.assertEquals(
+            "a few moments ago",
+            difference.toTimeAgoFormat(),
+            "String neq \"a few moments ago\" \n(gen ms: $randomMs)"
+        )
     }
 
     // Any amount of seconds more than 5 but less than 60 should be
@@ -77,7 +63,7 @@ class NumericExtensionsTest : PAPIPluginTest() {
         val difference = System.currentTimeMillis() - thatSeconds
         val result = difference.toTimeAgoFormat()
 
-        assertTrue(
+        Assertions.assertTrue(
             result.endsWith("second ago") || result.endsWith("seconds ago"),
             "String \"$result\" does not end with \"second ago\" and does not end with \"seconds ago\" \n(gen ms: $thatSeconds)"
         )
@@ -91,7 +77,7 @@ class NumericExtensionsTest : PAPIPluginTest() {
         val difference = System.currentTimeMillis() - thatDays
         val result = difference.toTimeAgoFormat()
 
-        assertTrue(
+        Assertions.assertTrue(
             result.endsWith("day ago") || result.endsWith("days ago"),
             "String \"$result\" does not end with \"day ago\" and does not end with \"days ago\" \n(gen days: $thatDays)"
         )
@@ -106,7 +92,7 @@ class NumericExtensionsTest : PAPIPluginTest() {
         val difference = System.currentTimeMillis() - thatMonths
         val result = difference.toTimeAgoFormat()
 
-        assertTrue(
+        Assertions.assertTrue(
             result.endsWith("month ago") || result.endsWith("months ago"),
             "String \"$result\" does not end with \"month ago\" and does not end with \"months ago\" \n(gen months: $thatMonths)"
         )
@@ -120,7 +106,7 @@ class NumericExtensionsTest : PAPIPluginTest() {
         val difference = System.currentTimeMillis() - thatYears
         val result = difference.toTimeAgoFormat()
 
-        assertTrue(
+        Assertions.assertTrue(
             result.endsWith("year ago") || result.endsWith("years ago"),
             "String \"$result\" does not end with \"year ago\" and does not end with \"years ago\" \n(gen years: $thatYears)"
         )
