@@ -55,17 +55,17 @@ class DoubleExtensionsTest {
     }
 
     @RepeatedTest(100)
-    fun countAllDigits_shouldEqualSumOfProvidedIntegralAndFractionalDigits() {
-        val integralDigits   = (1..3).random()
+    fun countAllDigits_shouldEqualSumOfProvidedWholeAndFractionalDigits() {
+        val wholeDigits   = (1..3).random()
         val fractionalDigits = (0..3).random()
-        val random = randomDouble(integerDigitCount=integralDigits, fractionalDigitCount=fractionalDigits)
-        val sum = integralDigits + fractionalDigits
+        val random = randomDouble(integerDigitCount=wholeDigits, fractionalDigitCount=fractionalDigits)
+        val sum = wholeDigits + fractionalDigits
         val counted = random.countAllDigits()
 
         assertEquals(
             sum,
             counted,
-            "Integral digits: $integralDigits\n" +
+            "Whole digits: $wholeDigits\n" +
                     "Fractional digits: $fractionalDigits\n" +
                     "Random: $random\n" +
                     "Expected sum: $sum\n" +
