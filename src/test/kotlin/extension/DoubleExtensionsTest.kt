@@ -3,7 +3,9 @@ package extension
 import io.github.tsgrissom.pluginapi.extension.kt.countAllDigits
 import io.github.tsgrissom.pluginapi.extension.kt.countLeadingDigits
 import io.github.tsgrissom.pluginapi.extension.kt.countTrailingDigits
+import io.github.tsgrissom.pluginapi.extension.kt.roundToDigits
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -55,8 +57,23 @@ class DoubleExtensionsTest {
     }
 
     @RepeatedTest(100)
+    fun countAllDigits_shouldEqualNumberOfProvidedWholeDigits_whenValueIsIntegerAsDouble() {
+        val wholeDigits = (1..3).random()
+        val random = randomDouble(integerDigitCount=wholeDigits, fractionalDigitCount=0)
+        val count = random.countAllDigits()
+
+        assertEquals(
+            wholeDigits,
+            random.countAllDigits(),
+            "Whole digits: $wholeDigits\n" +
+                    "Random: $random\n" +
+                    "All counted digits: $count"
+        )
+    }
+
+    @RepeatedTest(100)
     fun countAllDigits_shouldEqualSumOfProvidedWholeAndFractionalDigits() {
-        val wholeDigits   = (1..3).random()
+        val wholeDigits      = (1..3).random()
         val fractionalDigits = (0..3).random()
         val random = randomDouble(integerDigitCount=wholeDigits, fractionalDigitCount=fractionalDigits)
         val sum = wholeDigits + fractionalDigits
@@ -127,5 +144,14 @@ class DoubleExtensionsTest {
                     "Random: $random\n" +
                     "Counted trailing digits: $counted\n",
         )
+    }
+
+    // MARK: Double#roundToDigits Tests
+
+    @RepeatedTest(100)
+    fun roundToDigits_shouldNeqPi_whenPiIsRoundedToRandomNumberOfDigitsBetweenOneAndTen() {
+        val digitsOfPi = (1..10).random()
+        val rounded = Math.PI.roundToDigits(digitsOfPi)
+        assertNotEquals(Math.PI, rounded)
     }
 }
