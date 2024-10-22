@@ -1,4 +1,4 @@
-# Plugin API
+# Spigot Plugin API
 The `pluginapi` package houses tsgrissom's Bukkit plugin API to help create fast, intelligent, and powerful plugins
 for CraftBukkit servers.
 
